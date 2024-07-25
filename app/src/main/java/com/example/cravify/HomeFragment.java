@@ -1,4 +1,3 @@
-// HomeFragment.java
 package com.example.cravify;
 
 import android.os.Bundle;
@@ -19,8 +18,9 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_home_fragment, container, false);
 
-        // Retrieve the username from the arguments
+        // Retrieve the username and address from the arguments
         String username = getArguments() != null ? getArguments().getString("username") : "User";
+        String address = getArguments() != null ? getArguments().getString("address") : "Not available";
 
         // Process the username to get the first name and capitalize the first letter
         String firstName = getFirstName(username); // Process the username
@@ -30,6 +30,12 @@ public class HomeFragment extends Fragment {
         TextView greetingTextView = view.findViewById(R.id.username_crave);
         if (greetingTextView != null) {
             greetingTextView.setText("Hello! " + firstName + ", What are you craving today?");
+        }
+
+        // Find the TextView for address and set it
+        TextView addressTextView = view.findViewById(R.id.current_location_txt);
+        if (addressTextView != null) {
+            addressTextView.setText(address);
         }
 
         return view;

@@ -151,15 +151,12 @@
                 android:layout_marginTop="16dp"
                 android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-            <SearchView
-                android:id="@+id/search_view"
+            <fragment
+                android:id="@+id/autocomplete_fragment"
+                android:layout_marginTop="15dp"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:iconifiedByDefault="false"
-                android:queryHint="Search location"
-                android:background="@drawable/edittext_bg"
-                android:textColorHint="@color/intro_description_color" />
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/address"

@@ -1,4 +1,3 @@
-// MainActivity.java
 package com.example.cravify;
 
 import android.content.Intent;
@@ -20,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
 
     private String username;
+    private String address; // Add a field for address
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +27,15 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // Retrieve the username from the intent
+        // Retrieve the username and address from the intent
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("username")) {
-            username = intent.getStringExtra("username");
+        if (intent != null) {
+            if (intent.hasExtra("username")) {
+                username = intent.getStringExtra("username");
+            }
+            if (intent.hasExtra("address")) {
+                address = intent.getStringExtra("address");
+            }
         }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = new HomeFragment();
                     Bundle args = new Bundle();
                     args.putString("username", username);
+                    args.putString("address", address); // Pass the address to HomeFragment
                     selectedFragment.setArguments(args);
                 } else if (item.getItemId() == R.id.nav_saved) {
                     selectedFragment = new SavedFragment();
@@ -58,10 +64,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            // Load HomeFragment with username argument
+            // Load HomeFragment with username and address arguments
             HomeFragment homeFragment = new HomeFragment();
             Bundle args = new Bundle();
             args.putString("username", username);
+            args.putString("address", address); // Pass the address to HomeFragment
             homeFragment.setArguments(args);
             loadFragment(homeFragment);
             bottomNavigationView.setSelectedItemId(R.id.nav_home);

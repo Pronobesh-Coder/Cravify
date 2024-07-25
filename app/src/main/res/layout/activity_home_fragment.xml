@@ -45,7 +45,8 @@
 
                 <TextView
                     android:id="@+id/current_location_txt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginRight="20dp"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/loc_symbol"
                     android:layout_below="@id/del_to_txt"
