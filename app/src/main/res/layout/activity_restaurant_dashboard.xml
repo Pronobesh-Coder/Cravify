@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    android:padding="16dp"
+    android:id="@+id/main"
+    tools:context=".RestaurantDashboard"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Restaurant Name"
+            android:layout_marginTop="24dp"
+            android:padding="8dp"
+            android:id="@+id/restaurant_name_text_view"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/mainAppColour"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/mainAppColour"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:textColor="@color/white"
+            android:layout_marginRight="15dp"
+            android:shadowColor="#555555"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:layout_alignParentEnd="true"
+            android:shadowRadius="2"
+            android:layout_marginTop="24dp"
+            android:text="Logout" />
+
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bottom_nav_bg">
+
+        <!-- Dish Name -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Dish Name"
+            android:textColor="@color/mainAppColour"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/dishNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/uploadDishImageButton"
+                android:background="@drawable/edittext_bg"
+                android:hint="Enter Dish Name"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/intro_description_color"
+                android:textSize="13dp" />
+
+            <Button
+                android:id="@+id/uploadDishImageButton"
+                android:layout_width="40dp"
+                android:layout_height="45dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:backgroundTint="@color/mainAppColour"
+                android:drawableLeft="@drawable/baseline_camera_alt_24"
+                android:drawablePadding="8dp"
+                android:padding="8dp"
+                android:shadowColor="#555555"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"
+                android:textColor="@color/white"
+                android:text="" />
+
+        </RelativeLayout>
+
+        <!-- Dish Price -->
+
+        <!-- Dish Description -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:layout_marginTop="16dp"
+            android:text="Dish Description"
+            android:textColor="@color/mainAppColour"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/dishDescriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_bg"
+            android:hint="Enter Dish Description"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/intro_description_color"
+            android:textSize="13dp" />
+
+        <!-- Dish Type -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:layout_marginTop="16dp"
+            android:text="Dish Type"
+            android:textColor="@color/mainAppColour"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:id="@+id/dishTypeRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/vegRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Veg"/>
+
+            <RadioButton
+                android:id="@+id/nonVegRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Non-Veg" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:layout_marginTop="16dp"
+            android:text="Dish Price ₹"
+            android:textColor="@color/mainAppColour"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/dishPriceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_bg"
+            android:hint="Enter Dish Price (₹)"
+            android:inputType="numberDecimal"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/intro_description_color"
+            android:textSize="13dp" />
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <!-- Add Dish Button -->
+        <Button
+            android:id="@+id/addDishButton"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/mainAppColour"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:shadowColor="#555555"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:text="Add Dish"
+            android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/clear"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/mainAppColour"
+                android:fontFamily="@font/poppins_bold"
+                android:padding="8dp"
+                android:shadowColor="#555555"
+                android:shadowDx="2"
+                android:layout_toRightOf="@id/addDishButton"
+                android:shadowDy="2"
+                android:layout_marginLeft="20dp"
+                android:shadowRadius="2"
+                android:text="Clear"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

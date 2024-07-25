@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "887969949510",
+    "project_id": "cravify-c48ca",
+    "storage_bucket": "cravify-c48ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887969949510:android:6e99e7e361ad087d042747",
+        "android_client_info": {
+          "package_name": "com.example.cravify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZdamfeCutdkzECApfnALgjQ7usiIQanw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

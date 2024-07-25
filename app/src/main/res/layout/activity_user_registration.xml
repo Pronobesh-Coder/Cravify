@@ -1,0 +1,211 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    android:padding="16dp"
+    android:id="@+id/main"
+    tools:context=".UserRegistration">
+
+    <!-- Top Image -->
+    <ImageView
+        android:layout_marginTop="24dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/baseline_arrow_back_24"
+        android:clickable="true"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/back" />
+
+    <!-- Registration Fields -->
+
+    <TextView
+        android:id="@+id/user_sign_up_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="40dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:shadowColor="#505050"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:padding="3dp"
+        android:shadowRadius="2"
+        android:text="User Sign up"
+        android:textColor="@color/mainAppColour"
+        android:textSize="22dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_sign_up_text"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="22dp"
+            android:background="@drawable/bottom_nav_bg"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_bg"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/intro_description_color"
+                android:textSize="13dp" />
+
+            <EditText
+                android:id="@+id/age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edittext_bg"
+                android:hint="Age"
+                android:inputType="number"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/intro_description_color"
+                android:textSize="13dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/country_code"
+                    android:layout_width="wrap_content"
+                    app:ccp_showFullName="false"
+                    app:ccp_showNameCode="false"
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_showPhoneCode="false"
+                    app:ccp_showArrow="false"
+                    app:ccp_autoFormatNumber="true"
+                    android:layout_height="wrap_content"
+                    app:ccp_contentColor="@color/white"
+                    android:layout_marginTop="16dp" />
+
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="Phone"
+                    android:singleLine="true"
+                    android:layout_toRightOf="@id/country_code"
+                    android:inputType="phone"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/intro_description_color"
+                    android:textSize="13dp" />
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edittext_bg"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/intro_description_color"
+                android:textSize="13dp" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edittext_bg"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/intro_description_color"
+                android:textSize="13dp" />
+
+            <!-- Google Map -->
+            <fragment
+                android:id="@+id/map_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="16dp"
+                android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+            <SearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:iconifiedByDefault="false"
+                android:queryHint="Search location"
+                android:background="@drawable/edittext_bg"
+                android:textColorHint="@color/intro_description_color" />
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edittext_bg"
+                android:hint="Address"
+                android:inputType="textPostalAddress"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/intro_description_color"
+                android:textSize="13dp" />
+
+
+
+            <Button
+                android:id="@+id/register_button"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/mainAppColour"
+                android:fontFamily="@font/poppins_bold"
+                android:padding="8dp"
+                android:shadowColor="#555555"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"
+                android:text="Register"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Register Button -->
+
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/progBar"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:indeterminateTint="@color/mainAppColour"
+        android:gravity="center"/>
+
+</RelativeLayout>
