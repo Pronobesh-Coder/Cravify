@@ -17,9 +17,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cravify"
         tools:targetApi="31">
+        <activity
+            android:name=".IntroSlider"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCE_uX0dmtE96aMiwjy9x0OF--qPQcsG14"/>
+            android:value="AIzaSyCE_uX0dmtE96aMiwjy9x0OF--qPQcsG14" />
+
         <activity
             android:name=".MapsActivity"
             android:exported="false" />
@@ -60,7 +65,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".IntroSlider"
+            android:name=".Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

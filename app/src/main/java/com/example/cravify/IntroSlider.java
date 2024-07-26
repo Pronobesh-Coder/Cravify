@@ -1,5 +1,6 @@
 package com.example.cravify;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -124,6 +125,16 @@ public class IntroSlider extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("isIntroOpnend", true);
         editor.apply();
+    }
+    private void launchLoginScreen() {
+        SharedPreferences preferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("isFirstRun", false);
+        editor.apply();
+
+        Intent loginIntent = new Intent(IntroSlider.this, UserLogin.class);
+        startActivity(loginIntent);
+        finish();
     }
 
     private void loadLastScreen() {
