@@ -19,6 +19,9 @@ public class RestaurantDashboard extends AppCompatActivity {
 
     Button logout;
     TextView restaurantNameTextView;
+    TextView resCuisine;
+    TextView resAddress;
+    TextView resEmail;
     FirebaseAuth mAuth;
 
     @SuppressLint("MissingInflatedId")
@@ -30,15 +33,35 @@ public class RestaurantDashboard extends AppCompatActivity {
 
         logout = findViewById(R.id.logout_button);
         restaurantNameTextView = findViewById(R.id.restaurant_name_text_view);
+        resCuisine = findViewById(R.id.cuisine);
+        resAddress = findViewById(R.id.current_res_location);
+        resEmail = findViewById(R.id.email);
         mAuth = FirebaseAuth.getInstance();
 
-        // Retrieve restaurant name from Intent
+        // Retrieve data from Intent
         Intent intent = getIntent();
         String restaurantName = intent.getStringExtra("res_name");
+        String cuisine = intent.getStringExtra("cuisine");
+        String address = intent.getStringExtra("address");
+        String email = intent.getStringExtra("email");
+
+        // Display the retrieved data
         if (restaurantName != null) {
             restaurantNameTextView.setText(capitalizeFirstLetter(restaurantName));
         } else {
             restaurantNameTextView.setText("Restaurant");
+        }
+
+        if (cuisine != null) {
+            resCuisine.setText(cuisine);
+        } else {
+            resCuisine.setText("-");
+        }
+
+        if (address != null) {
+            resAddress.setText(address);
+        } else {
+            resAddress.setText("-");
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

@@ -48,167 +48,217 @@
         android:background="@drawable/bottom_nav_bg"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="22dp">
+        android:padding="5dp">
 
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@drawable/logo"
-            android:layout_marginBottom="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:id="@+id/image_preview"
             android:visibility="gone"/>
 
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_sign_up_text"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="30dp">
 
-            <EditText
-                android:id="@+id/name"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/upload_image_button"
-                android:background="@drawable/edittext_bg"
-                android:hint="Restaurant Name"
-                android:inputType="text"
-                android:padding="10dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/intro_description_color"
-                android:textSize="13dp" />
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bottom_nav_bg"
+                android:gravity="center">
 
-            <Button
-                android:id="@+id/upload_image_button"
-                android:layout_width="40dp"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:backgroundTint="@color/mainAppColour"
-                android:drawableLeft="@drawable/baseline_camera_alt_24"
-                android:drawablePadding="8dp"
-                android:padding="8dp"
-                android:shadowColor="#555555"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="2"
-                android:textColor="@color/white"/>
-        </RelativeLayout>
-        <EditText
-            android:id="@+id/cuisine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/edittext_bg"
-            android:hint="Cuisine"
-            android:inputType="text"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/intro_description_color"
-            android:textSize="13dp" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@id/upload_image_button"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="Restaurant Name"
+                        android:inputType="text"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/intro_description_color"
+                        android:textSize="13dp" />
 
-            <com.hbb20.CountryCodePicker
-                android:id="@+id/country_code"
-                android:layout_width="wrap_content"
-                app:ccp_showFullName="false"
-                app:ccp_showNameCode="false"
-                app:ccp_autoDetectCountry="true"
-                app:ccp_showPhoneCode="false"
-                app:ccp_showArrow="false"
-                app:ccp_autoFormatNumber="true"
-                android:layout_height="wrap_content"
-                app:ccp_contentColor="@color/white"
-                android:layout_marginTop="16dp" />
+                    <Button
+                        android:id="@+id/upload_image_button"
+                        android:layout_width="40dp"
+                        android:layout_height="45dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:backgroundTint="@color/mainAppColour"
+                        android:drawableLeft="@drawable/baseline_camera_alt_24"
+                        android:drawablePadding="8dp"
+                        android:padding="8dp"
+                        android:shadowColor="#555555"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="2"
+                        android:textColor="@color/white"/>
+                </RelativeLayout>
 
-            <EditText
-                android:id="@+id/phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/edittext_bg"
-                android:hint="Phone"
-                android:singleLine="true"
-                android:layout_toRightOf="@id/country_code"
-                android:inputType="phone"
-                android:padding="10dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/intro_description_color"
-                android:textSize="13dp" />
+                <EditText
+                    android:id="@+id/cuisine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="Cuisine"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/intro_description_color"
+                    android:textSize="13dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.hbb20.CountryCodePicker
+                        android:id="@+id/country_code"
+                        android:layout_width="wrap_content"
+                        app:ccp_showFullName="false"
+                        app:ccp_showNameCode="false"
+                        app:ccp_autoDetectCountry="true"
+                        app:ccp_showPhoneCode="false"
+                        app:ccp_showArrow="false"
+                        app:ccp_autoFormatNumber="true"
+                        android:layout_height="wrap_content"
+                        app:ccp_contentColor="@color/white"
+                        android:layout_marginTop="16dp" />
+
+                    <EditText
+                        android:id="@+id/phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="Phone"
+                        android:singleLine="true"
+                        android:layout_toRightOf="@id/country_code"
+                        android:inputType="phone"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/intro_description_color"
+                        android:textSize="13dp" />
+
+                </RelativeLayout>
+
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/intro_description_color"
+                    android:textSize="13dp" />
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/intro_description_color"
+                    android:textSize="13dp" />
+
+                <!-- Google Map -->
+                <fragment
+                    android:id="@+id/map_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="16dp"
+                    android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/search_background"
+                    android:orientation="vertical">
+
+                    <fragment
+                        android:id="@+id/autocomplete_fragment"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="Address"
+                    android:inputType="textPostalAddress"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/intro_description_color"
+                    android:textSize="13dp" />
 
 
 
-        </RelativeLayout>
-
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/edittext_bg"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/intro_description_color"
-            android:textSize="13dp" />
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/edittext_bg"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/intro_description_color"
-            android:textSize="13dp" />
-
-        <EditText
-            android:id="@+id/address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/edittext_bg"
-            android:hint="Address"
-            android:inputType="textPostalAddress"
-            android:padding="10dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/intro_description_color"
-            android:textSize="13dp" />
-
-        <!-- Register Button -->
-        <Button
-            android:id="@+id/register_button"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/mainAppColour"
-            android:fontFamily="@font/poppins_bold"
-            android:padding="8dp"
-            android:shadowColor="#555555"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="2"
-            android:text="Register"
-            android:textColor="@color/white" />
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:id="@+id/progBar"
-            android:visibility="gone"
-            android:layout_marginTop="10dp"
-            android:indeterminateTint="@color/mainAppColour"
-            android:gravity="center"/>
-
+                <Button
+                    android:id="@+id/register_button"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/mainAppColour"
+                    android:fontFamily="@font/poppins_bold"
+                    android:padding="8dp"
+                    android:shadowColor="#555555"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:layout_marginBottom="20dp"
+                    android:shadowRadius="2"
+                    android:text="Register"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/progBar"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_below="@id/back"
+        android:layout_gravity="center"
+        android:layout_toRightOf="@id/user_sign_up_text"
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:indeterminateTint="@color/mainAppColour"
+        android:visibility="gone" />
+
 </RelativeLayout>
