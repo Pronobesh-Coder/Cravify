@@ -36,6 +36,7 @@ public class AdminLogin extends AppCompatActivity {
             public void onClick(View view) {
                 if(Email.getText().toString().equals("admin@gmail.com") && Password.getText().toString().equals("admin1234")){
                     Toast.makeText(getApplicationContext(),"Welcome Admin!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Showing Usage Data...",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(AdminLogin.this,AdminDashboard.class);
                     startActivity(intent);
                 }else{

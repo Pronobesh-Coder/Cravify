@@ -57,6 +57,8 @@ public class UserLogin extends AppCompatActivity {
         // Check if user is already logged in
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
+            progressBar.setVisibility(View.VISIBLE);
+            Toast.makeText(getApplicationContext(),"Logging you in...",Toast.LENGTH_SHORT).show();
             // User is logged in, fetch user details and navigate to MainActivity
             fetchUserDetails(currentUser.getEmail());
             return; // Exit onCreate early
