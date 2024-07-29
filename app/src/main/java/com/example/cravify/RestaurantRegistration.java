@@ -62,6 +62,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 public class RestaurantRegistration extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -88,6 +92,9 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
     private Location currentLocation;
     private ProgressBar progressBar;
 
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +119,8 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Initialize the Places SDK
@@ -253,10 +262,9 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            progressBar.setVisibility(View.VISIBLE);
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null) {
-                                uploadRestaurantData(user.getUid(), name, cuisine, phone, address, email);
+                                uploadImageAndRegisterRestaurant(user.getUid(), name, cuisine, phone, address, email);
                             }
                         } else {
                             progressBar.setVisibility(View.GONE);
@@ -266,13 +274,44 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
                 });
     }
 
-    private void uploadRestaurantData(String userId, String name, String cuisine, String phone, String address, String email) {
+    private void uploadImageAndRegisterRestaurant(String userId, String name, String cuisine, String phone, String address, String email) {
+        if (imageUri != null) {
+            StorageReference imageRef = storageRef.child("restaurant_images/" + userId + ".jpg");
+            UploadTask uploadTask = imageRef.putFile(imageUri);
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String imageUrl = uri.toString();
+                            saveRestaurantDataToFirestore(userId, name, cuisine, phone, address, email, imageUrl);
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(RestaurantRegistration.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            saveRestaurantDataToFirestore(userId, name, cuisine, phone, address, email, null);
+        }
+    }
+
+    private void saveRestaurantDataToFirestore(String userId, String name, String cuisine, String phone, String address, String email, String imageUrl) {
         Map<String, Object> restaurant = new HashMap<>();
         restaurant.put("Name", name);
         restaurant.put("Cuisine", cuisine);
         restaurant.put("Phone", ccp.getFullNumberWithPlus());
         restaurant.put("Address", address);
         restaurant.put("Email", email);
+        if (imageUrl != null) {
+            restaurant.put("ImageUrl", imageUrl);
+        }
 
         db.collection("restaurants").document(userId).set(restaurant)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -287,14 +326,14 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
                         editor.putBoolean("isLoggedIn", true);
                         editor.putString("res_name", email.split("@")[0]);
                         editor.putString("address", address);
-                        editor.putString("cuisine",cuisine);
+                        editor.putString("cuisine", cuisine);
                         editor.apply();
 
                         // Navigate to the main activity
                         Intent intent = new Intent(RestaurantRegistration.this, RestaurantDashboard.class);
                         intent.putExtra("res_name", email.split("@")[0]);
                         intent.putExtra("address", address);
-                        intent.putExtra("cuisine",cuisine);
+                        intent.putExtra("cuisine", cuisine);
                         startActivity(intent);
                         finish();
                     }

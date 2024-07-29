@@ -92,10 +92,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/food_categories_recyclerview"
                 android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:orientation="horizontal"
-                android:background="@android:color/transparent"
                 android:layout_margin="20dp"
-                android:layout_height="200dp"/>
+                android:layout_gravity="start"
+                android:background="@android:color/transparent"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -103,7 +104,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="Nearby Restaurants"
+                android:text="Top Restaurants"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -115,11 +116,8 @@
                 android:orientation="vertical"
                 android:layout_height="wrap_content"/>
 
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-
 
 </RelativeLayout>
