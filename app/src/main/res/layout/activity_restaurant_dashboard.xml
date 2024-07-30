@@ -82,11 +82,21 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp"
-        android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/bottom_nav_bg">
+
+        <ImageView
+            android:id="@+id/dish_image_view"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center"
+            android:contentDescription="Dish Image"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo"
+            android:visibility="gone"/>
 
         <!-- Dish Name -->
         <TextView
@@ -151,6 +161,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_bg"
             android:hint="Enter Dish Description"
+            android:lines="1"
+            android:maxLines="1"
             android:padding="10dp"
             android:textColor="@color/black"
             android:textColorHint="@color/intro_description_color"
@@ -226,6 +238,7 @@
             android:shadowColor="#555555"
             android:shadowDx="2"
             android:shadowDy="2"
+            android:layout_marginBottom="10dp"
             android:shadowRadius="2"
             android:text="Add Dish"
             android:textColor="@color/white" />
@@ -242,6 +255,7 @@
                 android:shadowDx="2"
                 android:layout_toRightOf="@id/addDishButton"
                 android:shadowDy="2"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:shadowRadius="2"
                 android:text="Clear"

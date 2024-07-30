@@ -1,5 +1,6 @@
 package com.example.cravify;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -54,6 +55,7 @@ public class HomeFragment extends Fragment {
         restaurantList = new ArrayList<>();
         restaurantAdapter = new RestaurantAdapter(restaurantList,getContext());
         restaurantRecyclerView.setAdapter(restaurantAdapter);
+
 
         // Load restaurant data from Firestore
         loadRestaurantData();
