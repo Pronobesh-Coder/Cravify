@@ -1,6 +1,7 @@
 package com.example.cravify;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,15 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
+
     private List<Restaurant> restaurantList;
     private Context context;
+    private OnItemClickListener onItemClickListener;
 
-    public RestaurantAdapter(List<Restaurant> restaurantList, Context context) {
+    public RestaurantAdapter(List<Restaurant> restaurantList, Context context, OnItemClickListener onItemClickListener) {
         this.restaurantList = restaurantList;
         this.context = context;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -41,6 +45,13 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         Glide.with(context)
                 .load(restaurant.getImageUrl())
                 .into(holder.imageView);
+
+        // Set click listener for the item view
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(restaurant);
+            }
+        });
     }
 
     @Override
@@ -51,15 +62,20 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         TextView cuisineTextView;
-        TextView addressTextView; // New TextView
+        TextView addressTextView;
         ImageView imageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.restaurant_name);
             cuisineTextView = itemView.findViewById(R.id.restaurant_cuisine);
-            addressTextView = itemView.findViewById(R.id.restaurant_address); // New TextView
+            addressTextView = itemView.findViewById(R.id.restaurant_address);
             imageView = itemView.findViewById(R.id.restaurant_image);
         }
+    }
+
+    // Interface for handling item clicks
+    public interface OnItemClickListener {
+        void onItemClick(Restaurant restaurant);
     }
 }

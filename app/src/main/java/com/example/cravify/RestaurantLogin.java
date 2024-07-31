@@ -90,6 +90,7 @@ public class RestaurantLogin extends AppCompatActivity {
                                             fetchRestaurantDataAndProceed(firebaseUser.getUid(), email);
                                         }
                                     } else {
+                                        progressBar.setVisibility(View.GONE);
                                         Toast.makeText(getApplicationContext(), "No Account Found!", Toast.LENGTH_SHORT).show();
                                     }
                                 }

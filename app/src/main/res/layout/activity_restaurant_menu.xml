@@ -1,0 +1,100 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- Restaurant Info -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:background="@drawable/linear_layout_rounded_background"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="50dp"
+        android:clipToOutline="true">
+
+        <TextView
+            android:id="@+id/restaurant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restaurant Name"
+            android:textSize="22sp"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="#000000"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/restaurant_cuisine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cuisine"
+            android:textSize="14sp"
+            android:paddingLeft="3dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="#727272" />
+
+        <TextView
+            android:id="@+id/restaurant_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_background"
+            android:clipToOutline="true"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center"
+            android:padding="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="Address"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <!-- Menu Title -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"
+            android:background="@drawable/line_drawable" />
+
+        <TextView
+            android:id="@+id/menuTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Menu"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:fontFamily="@font/poppins_bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"
+            android:background="@drawable/line_drawable" />
+
+    </LinearLayout>
+
+    <!-- RecyclerView for Food Items -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/menu_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:clipToPadding="false" />
+</LinearLayout>

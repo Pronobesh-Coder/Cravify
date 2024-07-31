@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Splash extends AppCompatActivity {
     VideoView v_view;
 
-    private static final int SPLASH_DISPLAY_LENGTH = 3000; // 3 seconds
+    private static final int SPLASH_DISPLAY_LENGTH = 3500; // 3.5 seconds
 
     @SuppressLint("MissingInflatedId")
     @Override

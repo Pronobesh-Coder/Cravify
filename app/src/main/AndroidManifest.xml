@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Cravify"
         tools:targetApi="31">
         <activity
+            android:name=".RestaurantMenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".IntroSlider"
             android:exported="false" />
 

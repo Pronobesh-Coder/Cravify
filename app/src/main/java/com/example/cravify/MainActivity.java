@@ -2,10 +2,8 @@ package com.example.cravify;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -39,28 +37,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment selectedFragment = null;
-                if (item.getItemId() == R.id.nav_home) {
-                    selectedFragment = new HomeFragment();
-                    Bundle args = new Bundle();
-                    args.putString("username", username);
-                    args.putString("address", address); // Pass the address to HomeFragment
-                    selectedFragment.setArguments(args);
-                } else if (item.getItemId() == R.id.nav_saved) {
-                    selectedFragment = new SavedFragment();
-                } else if (item.getItemId() == R.id.nav_history) {
-                    selectedFragment = new HistoryFragment();
-                } else if (item.getItemId() == R.id.nav_profile) {
-                    selectedFragment = new ProfileFragment();
-                }
-                if (selectedFragment != null) {
-                    loadFragment(selectedFragment);
-                }
-                return true;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+            if (item.getItemId() == R.id.nav_home) {
+                selectedFragment = new HomeFragment();
+                Bundle args = new Bundle();
+                args.putString("username", username);
+                args.putString("address", address); // Pass the address to HomeFragment
+                selectedFragment.setArguments(args);
+            } else if (item.getItemId() == R.id.nav_saved) {
+                selectedFragment = new SavedFragment();
+            } else if (item.getItemId() == R.id.nav_history) {
+                selectedFragment = new HistoryFragment();
+            } else if (item.getItemId() == R.id.nav_profile) {
+                selectedFragment = new ProfileFragment();
             }
+            if (selectedFragment != null) {
+                loadFragment(selectedFragment);
+            }
+            return true;
         });
 
         if (savedInstanceState == null) {
@@ -85,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
+        // Avoid using .addToBackStack() unless you need to keep the previous fragment on the stack
         fragmentTransaction.commit();
     }
 }

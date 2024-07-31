@@ -1,0 +1,5 @@
+<!-- res/drawable/linear_layout_rounded_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#EEEEEE" />
+    <corners android:radius="30dp" />
+</shape>

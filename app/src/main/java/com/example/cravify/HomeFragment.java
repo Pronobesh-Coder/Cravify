@@ -26,14 +26,22 @@ public class HomeFragment extends Fragment {
     private RecyclerView restaurantRecyclerView;
     private RestaurantAdapter restaurantAdapter;
     private List<Restaurant> restaurantList;
+    private String username;
+    private String address;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_home_fragment, container, false);
 
-        String username = getArguments() != null ? getArguments().getString("username") : getUsernameFromPreferences();
-        String address = getArguments() != null ? getArguments().getString("address") : "Not available";
+        if (getArguments() != null) {
+            username = getArguments().getString("username");
+            address = getArguments().getString("address");
+        } else {
+            // Use defaults or retrieve from preferences
+            username = "User";
+            address = "Not available";
+        }
 
         String firstName = getFirstName(username);
         firstName = capitalizeFirstLetter(firstName);
@@ -43,21 +51,33 @@ public class HomeFragment extends Fragment {
             greetingTextView.setText("Hello! " + firstName + ", What are you craving today?");
         }
 
-        // Find the TextView for address and set it
         TextView addressTextView = view.findViewById(R.id.current_location_txt);
         if (addressTextView != null) {
             addressTextView.setText(address);
         }
 
-        // Initialize the RecyclerView
         restaurantRecyclerView = view.findViewById(R.id.restaurant_recyclerview);
         restaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         restaurantList = new ArrayList<>();
-        restaurantAdapter = new RestaurantAdapter(restaurantList,getContext());
+        restaurantAdapter = new RestaurantAdapter(restaurantList, getContext(), restaurant -> {
+            String fullAddress = restaurant.getAddress();
+            String[] addressParts = fullAddress.split(",");
+
+            String addressPart = "";
+            if (addressParts.length > 3) {
+                addressPart = addressParts[2].trim() + "," + addressParts[3].trim();
+            } else if (addressParts.length > 2) {
+                addressPart = addressParts[2].trim();
+            }
+
+            Intent intent = new Intent(getActivity(), RestaurantMenuActivity.class);
+            intent.putExtra("restaurantName", restaurant.getName());
+            intent.putExtra("restaurantCuisine", restaurant.getCuisine());
+            intent.putExtra("restaurantAddress", addressPart);
+            startActivity(intent);
+        });
         restaurantRecyclerView.setAdapter(restaurantAdapter);
 
-
-        // Load restaurant data from Firestore
         loadRestaurantData();
 
         return view;
@@ -85,11 +105,6 @@ public class HomeFragment extends Fragment {
                         Toast.makeText(getContext(), "Restaurant Not Found!", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    private String getUsernameFromPreferences() {
-        SharedPreferences preferences = getActivity().getSharedPreferences("user_prefs", getActivity().MODE_PRIVATE);
-        return preferences.getString("full_name", "User");
     }
 
     private String getFirstName(String username) {
