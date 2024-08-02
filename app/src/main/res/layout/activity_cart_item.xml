@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -7,18 +8,16 @@
     android:background="#FFFFFF"
     android:gravity="center_vertical">
 
-    <!-- Left side: icon and text details -->
+    <!-- Left side: text details -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:orientation="vertical">
 
-        <!-- Non-veg Icon -->
-
         <!-- Food Name -->
         <TextView
-            android:id="@+id/menu_item_name"
+            android:id="@+id/cart_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Food Name"
@@ -27,8 +26,9 @@
             android:textColor="#000000"
             android:paddingTop="8dp" />
 
+        <!-- Veg/NonVeg -->
         <TextView
-            android:id="@+id/menu_item_type"
+            android:id="@+id/cart_item_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
@@ -38,7 +38,7 @@
 
         <!-- Food Price -->
         <TextView
-            android:id="@+id/menu_item_price"
+            android:id="@+id/cart_item_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="₹370"
@@ -49,7 +49,7 @@
 
         <!-- Food Description -->
         <TextView
-            android:id="@+id/menu_item_description"
+            android:id="@+id/cart_item_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Marinated Basa Cut Into Strips"
@@ -58,6 +58,7 @@
             android:textColor="#727272"
             android:paddingTop="4dp" />
     </LinearLayout>
+
     <!-- Right side: image and button -->
     <FrameLayout
         android:layout_width="0dp"
@@ -65,7 +66,7 @@
         android:layout_weight="1">
 
         <ImageView
-            android:id="@+id/menu_item_image"
+            android:id="@+id/cart_item_image"
             android:layout_width="125dp"
             android:layout_height="100dp"
             android:src="@drawable/logo"
@@ -73,19 +74,23 @@
             android:layout_gravity="center" />
 
         <LinearLayout
-            android:id="@+id/addToCartLayout"
+            android:id="@+id/quantityLayout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_gravity="bottom|center_horizontal"
             android:orientation="horizontal"
-            android:visibility="gone">
+            >
 
             <Button
                 android:id="@+id/decrementButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:text="-"
-                android:textSize="12sp" />
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/mainAppColour"
+                android:background="@drawable/decrement_button_background" />
 
             <TextView
                 android:id="@+id/itemCountText"
@@ -93,32 +98,20 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:background="@drawable/quantity_button_background"
                 android:text="1"
-                android:textSize="12sp" />
+                android:textSize="20sp"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/incrementButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:text="+"
-                android:textSize="12sp" />
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/increment_button_background" />
         </LinearLayout>
-
-        <Button
-            android:id="@+id/addToCartButton"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:backgroundTint="#E4A442"
-            android:fontFamily="@font/poppins_bold"
-            android:padding="8dp"
-            android:shadowColor="#555555"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="2"
-            android:text="ADD"
-            android:textSize="12sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="30dp" />
     </FrameLayout>
 </LinearLayout>

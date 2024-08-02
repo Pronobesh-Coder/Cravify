@@ -1,114 +1,335 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#F2F2F2"
     tools:context=".ProfileFragment">
 
-    <ImageView
-        android:id="@+id/logout_button"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/logout"
-        android:text="Logout"
-        android:textColor="@color/white" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/profile_image"
-        android:src="@drawable/ic_placeholder"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:background="@drawable/search_background"
-        android:padding="15dp"
-        android:contentDescription="Profile Image" />
+        <ImageView
+            android:id="@+id/profile_image"
+            android:src="@drawable/ic_placeholder"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/search_background"
+            android:padding="15dp"
+            android:contentDescription="Profile Image" />
 
+        <ImageView
+            android:id="@+id/change_photo_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@id/profile_image"
+            android:layout_alignEnd="@id/profile_image"
+            android:layout_marginTop="-20dp"
+            android:clickable="true"
+            android:src="@drawable/baseline_edit_24"
+            android:contentDescription="Change Photo" />
 
-    <ImageView
-        android:id="@+id/change_photo_button"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_below="@id/profile_image"
-        android:layout_alignEnd="@id/profile_image"
-        android:layout_marginTop="-20dp"
-        android:clickable="true"
-        android:src="@drawable/baseline_edit_24" />
+        <TextView
+            android:id="@+id/email_address_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_image"
+            android:layout_marginTop="16dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:text="EMAIL ADDRESS"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            android:fontFamily="@font/poppins_regular" />
 
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/change_photo_button"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/search_background"
-        android:padding="15dp"
-        android:text="Name"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/poppins_semibold" />
+        <TextView
+            android:id="@+id/user_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/email_address_label"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="20dp"
+            android:layout_alignParentStart="true"
+            android:text="abhimenon04@gmail.com"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_regular" />
 
-    <TextView
-        android:id="@+id/user_age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/user_name"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="50dp"
-        android:padding="10dp"
-        android:text="Age"
-        android:textSize="13sp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/poppins_light" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/user_email"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@android:color/darker_gray"/>
 
-    <TextView
-        android:id="@+id/user_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/user_age"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="15dp"
-        android:padding="10dp"
-        android:text="Phone"
-        android:textSize="13sp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/poppins_light" />
+        <TextView
+            android:id="@+id/address_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_email"
+            android:layout_marginTop="16dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:text="ADDRESS"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            android:fontFamily="@font/poppins_regular" />
 
-    <TextView
-        android:id="@+id/user_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/user_phone"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="15dp"
-        android:padding="10dp"
-        android:text="Email"
-        android:textSize="13sp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/poppins_light" />
+        <TextView
+            android:id="@+id/user_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/address_header"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="20dp"
+            android:layout_alignParentStart="true"
+            android:text="206/d, Jodhpur Gardens, Kolkata -70045"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_regular" />
 
-    <TextView
-        android:id="@+id/user_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/user_email"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="15dp"
-        android:padding="10dp"
-        android:text="Address"
-        android:textSize="13sp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/poppins_light" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/user_address"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/darker_gray"/>
 
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/details_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_address"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/name_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NAME"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/poppins_regular" />
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_below="@id/name_label"
+                    android:text="Abhinandan Menon"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppins_regular" />
+
+                <ImageView
+                    android:id="@+id/edit_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_edit_24"
+
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/name_label"
+                    android:contentDescription="Edit Name"
+                    android:layout_marginStart="16dp"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:background="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/age_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AGE"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/poppins_regular" />
+
+                <TextView
+                    android:id="@+id/user_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="21"
+                    android:layout_below="@id/age_label"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppins_regular" />
+
+                <ImageView
+                    android:id="@+id/edit_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/age_label"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/baseline_edit_24"
+                    android:contentDescription="Edit Age" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:background="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/phone_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PHONE NUMBER"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/poppins_regular" />
+
+                <TextView
+                    android:id="@+id/user_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/phone_label"
+                    android:text="8910191814"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppins_regular" />
+
+                <ImageView
+                    android:id="@+id/edit_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/phone_label"
+                    android:src="@drawable/baseline_edit_24"
+                    android:contentDescription="Edit Phone"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/details_layout"
+
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/my_favorites_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:drawableEnd="@drawable/baseline_arrow_forward_24"
+                android:gravity="start|center_vertical"
+                android:padding="16dp"
+                android:text="My Favorites"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/poppins_regular"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@android:color/darker_gray"/>
+
+            <Button
+                android:id="@+id/order_history_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:drawableEnd="@drawable/baseline_arrow_forward_24"
+                android:gravity="start|center_vertical"
+                android:padding="16dp"
+                android:text="Order History"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/poppins_regular"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@android:color/darker_gray"/>
+
+            <Button
+                android:id="@+id/delete_account_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:drawableEnd="@drawable/baseline_arrow_forward_24"
+                android:gravity="start|center_vertical"
+                android:padding="16dp"
+                android:text="Delete Your Account"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/poppins_regular"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@android:color/darker_gray"/>
+
+            <Button
+                android:id="@+id/logout_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:drawableEnd="@drawable/baseline_arrow_forward_24"
+                android:gravity="start|center_vertical"
+                android:padding="16dp"
+                android:text="Logout"
+                android:layout_marginBottom="20dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/poppins_regular"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>

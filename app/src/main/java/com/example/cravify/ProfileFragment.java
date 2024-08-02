@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,8 +43,9 @@ public class ProfileFragment extends Fragment {
     private FirebaseFirestore db;
     private StorageReference storageReference;
 
-    private ImageView profileImageView, logoutButton, changePhoto;
+    private ImageView profileImageView, changePhoto;
     private TextView userNameTextView, userAgeTextView, userPhoneTextView, userEmailTextView, userAddressTextView;
+    private Button logoutButton;
 
     @Nullable
     @Override

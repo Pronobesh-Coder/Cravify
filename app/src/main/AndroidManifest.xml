@@ -24,6 +24,9 @@
             android:value="AIzaSyCE_uX0dmtE96aMiwjy9x0OF--qPQcsG14" />
 
         <activity
+            android:name=".CartItem"
+            android:exported="false" />
+        <activity
             android:name=".RestaurantMenuActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
