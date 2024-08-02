@@ -42,7 +42,6 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hbb20.CountryCodePicker;
 import com.google.android.libraries.places.api.Places;
@@ -59,6 +58,7 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
 
     private static final String TAG = "UserRegistration";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final String DEFAULT_PROFILE_IMAGE_URL = "";
 
     ImageView btn_back;
     EditText Name, Age, Phone, Email, Password;
@@ -72,7 +72,7 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
     LatLng selectedLocation;
     FusedLocationProviderClient fusedLocationClient;
     AutocompleteSupportFragment autocompleteFragment;
-    Location currentLocation; // Add this field
+    Location currentLocation;
 
     @Override
     public void onStart() {
@@ -204,37 +204,6 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
             } else {
                 try {
                     progressBar.setVisibility(View.VISIBLE);
-
-                    String fullPhone = ccp.getFullNumberWithPlus();
-                    int age = Integer.parseInt(stringAge);
-                    Map<String, Object> user = new HashMap<>();
-                    user.put("Name", name);
-                    user.put("Age", age);
-                    user.put("Email", email);
-                    user.put("Phone", fullPhone);
-                    user.put("Address", address);
-
-                    // Store the selected location or current location if no selection
-                    LatLng locationToStore = selectedLocation != null ? selectedLocation : (currentLocation != null ? new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()) : null);
-                    if (locationToStore != null) {
-                        user.put("Location", locationToStore);
-                    }
-
-                    db.collection("users")
-                            .add(user)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Toast.makeText(getApplicationContext(), "Details Added!", Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getApplicationContext(), "Failed to add details!", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
                     mAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -242,16 +211,47 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
                                     if (task.isSuccessful()) {
                                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                                         if (firebaseUser != null) {
-                                            Intent intent = new Intent(UserRegistration.this, MainActivity.class);
-                                            intent.putExtra("username", firebaseUser.getEmail().split("@")[0]);
-                                            intent.putExtra("address", address); // Pass the address
-                                            startActivity(intent);
-                                            finish();
+                                            String userId = firebaseUser.getUid();
+                                            String fullPhone = ccp.getFullNumberWithPlus();
+                                            //int age = Integer.parseInt(stringAge);
+
+                                            Map<String, Object> user = new HashMap<>();
+                                            user.put("Name", name);
+                                            user.put("Age", stringAge);
+                                            user.put("Email", email);
+                                            user.put("Phone", fullPhone);
+                                            user.put("Address", address);
+                                            user.put("profileImageUrl", DEFAULT_PROFILE_IMAGE_URL);
+
+                                            LatLng locationToStore = selectedLocation != null ? selectedLocation : (currentLocation != null ? new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()) : null);
+                                            if (locationToStore != null) {
+                                                user.put("Location", locationToStore);
+                                            }
+
+                                            // Use userId as the document ID
+                                            db.collection("users").document(userId).set(user)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Toast.makeText(getApplicationContext(), "Details Added!", Toast.LENGTH_SHORT).show();
+                                                            Intent intent = new Intent(UserRegistration.this, MainActivity.class);
+                                                            intent.putExtra("username", firebaseUser.getEmail().split("@")[0]);
+                                                            intent.putExtra("address", address); // Pass the address
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            progressBar.setVisibility(View.GONE);
+                                                            Toast.makeText(UserRegistration.this, "Failed to add details!", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
                                         }
                                     } else {
                                         progressBar.setVisibility(View.GONE);
-                                        Toast.makeText(UserRegistration.this, "Failed to create account!",
-                                                Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(UserRegistration.this, "Failed to create account!", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -263,13 +263,16 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
         });
 
         // Request location permissions if not already granted
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             getCurrentLocation();
         }
     }
 
+    // Request location permissions result
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -277,53 +280,46 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getCurrentLocation();
             } else {
-                Toast.makeText(this, "Location permission is required to show current location", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Location permission denied!", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    // Get current location
     private void getCurrentLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            currentLocation = location; // Store the current location
-                            if (location != null && mMap != null) {
-                                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                                mMap.clear();
-                                mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            currentLocation = location;
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            if (mMap != null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-
-                                Geocoder geocoder = new Geocoder(UserRegistration.this, Locale.getDefault());
-                                try {
-                                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                                    if (addresses != null && !addresses.isEmpty()) {
-                                        Address address = addresses.get(0);
-                                        AddressTextView.setText(address.getAddressLine(0));
-                                    } else {
-                                        AddressTextView.setText("Current Location");
-                                    }
-                                } catch (IOException e) {
-                                    AddressTextView.setText("Current Location");
-                                    e.printStackTrace();
+                            }
+                            Geocoder geocoder = new Geocoder(UserRegistration.this, Locale.getDefault());
+                            try {
+                                List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                                if (addresses != null && !addresses.isEmpty()) {
+                                    String address = addresses.get(0).getAddressLine(0);
+                                    AddressTextView.setText(address);
                                 }
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(UserRegistration.this, "Failed to get current location", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        }
-                    });
-        }
+                    }
+                });
     }
 
+    // Initialize map
     @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        getCurrentLocation();
+        LatLng defaultLocation = new LatLng(-34, 151);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(defaultLocation));
     }
 }

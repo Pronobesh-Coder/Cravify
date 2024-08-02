@@ -1,32 +1,114 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
     tools:context=".ProfileFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PROFILE_FRAGMENT"/>
-
-    <Button
+    <ImageView
         android:id="@+id/logout_button"
-        android:layout_width="190dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/mainAppColour"
-        android:fontFamily="@font/poppins_bold"
-        android:padding="10dp"
-        android:shadowColor="#555555"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:shadowRadius="2"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/logout"
         android:text="Logout"
         android:textColor="@color/white" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/profile_image"
+        android:src="@drawable/ic_placeholder"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/search_background"
+        android:padding="15dp"
+        android:contentDescription="Profile Image" />
+
+
+    <ImageView
+        android:id="@+id/change_photo_button"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/profile_image"
+        android:layout_alignEnd="@id/profile_image"
+        android:layout_marginTop="-20dp"
+        android:clickable="true"
+        android:src="@drawable/baseline_edit_24" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/change_photo_button"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/search_background"
+        android:padding="15dp"
+        android:text="Name"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_semibold" />
+
+    <TextView
+        android:id="@+id/user_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_name"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="50dp"
+        android:padding="10dp"
+        android:text="Age"
+        android:textSize="13sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_light" />
+
+    <TextView
+        android:id="@+id/user_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_age"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="15dp"
+        android:padding="10dp"
+        android:text="Phone"
+        android:textSize="13sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_light" />
+
+    <TextView
+        android:id="@+id/user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_phone"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="15dp"
+        android:padding="10dp"
+        android:text="Email"
+        android:textSize="13sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_light" />
+
+    <TextView
+        android:id="@+id/user_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_email"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="15dp"
+        android:padding="10dp"
+        android:text="Address"
+        android:textSize="13sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_light" />
+
+</RelativeLayout>
