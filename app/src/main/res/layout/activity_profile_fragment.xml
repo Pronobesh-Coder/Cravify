@@ -12,11 +12,10 @@
 
         <ImageView
             android:id="@+id/profile_image"
-            android:src="@drawable/ic_placeholder"
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/search_background"
             android:padding="15dp"
             android:contentDescription="Profile Image" />
@@ -55,7 +54,7 @@
             android:layout_alignParentStart="true"
             android:text="abhimenon04@gmail.com"
             android:textColor="@android:color/black"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:fontFamily="@font/poppins_regular" />
 
         <View
@@ -90,7 +89,7 @@
             android:layout_alignParentStart="true"
             android:text="206/d, Jodhpur Gardens, Kolkata -70045"
             android:textColor="@android:color/black"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:fontFamily="@font/poppins_regular" />
 
         <View
@@ -135,7 +134,7 @@
                     android:layout_below="@id/name_label"
                     android:text="Abhinandan Menon"
                     android:textColor="@android:color/black"
-                    android:textSize="16sp"
+                    android:textSize="13sp"
                     android:fontFamily="@font/poppins_regular" />
 
                 <ImageView
@@ -179,7 +178,7 @@
                     android:text="21"
                     android:layout_below="@id/age_label"
                     android:textColor="@android:color/black"
-                    android:textSize="16sp"
+                    android:textSize="13sp"
                     android:fontFamily="@font/poppins_regular" />
 
                 <ImageView
@@ -221,7 +220,7 @@
                     android:layout_below="@id/phone_label"
                     android:text="8910191814"
                     android:textColor="@android:color/black"
-                    android:textSize="16sp"
+                    android:textSize="13sp"
                     android:fontFamily="@font/poppins_regular" />
 
                 <ImageView
@@ -258,7 +257,7 @@
                 android:padding="16dp"
                 android:text="My Favorites"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
+                android:textSize="13sp"
                 android:drawablePadding="8dp"
                 android:fontFamily="@font/poppins_regular"/>
 
@@ -280,7 +279,7 @@
                 android:padding="16dp"
                 android:text="Order History"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
+                android:textSize="13sp"
                 android:drawablePadding="8dp"
                 android:fontFamily="@font/poppins_regular"/>
 
@@ -302,7 +301,7 @@
                 android:padding="16dp"
                 android:text="Delete Your Account"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
+                android:textSize="13sp"
                 android:drawablePadding="8dp"
                 android:fontFamily="@font/poppins_regular"/>
 
@@ -325,7 +324,7 @@
                 android:text="Logout"
                 android:layout_marginBottom="20dp"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
+                android:textSize="13sp"
                 android:drawablePadding="8dp"
                 android:fontFamily="@font/poppins_regular"/>
 

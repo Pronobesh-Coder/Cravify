@@ -76,6 +76,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void navigateToSavedFragment() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_saved); // Assuming 'saved' is the menu ID for SavedFragment
+    }
+
+    public void navigateToHistoryFragment() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_history); // Assuming 'history' is the menu ID for HistoryFragment
+    }
+
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
