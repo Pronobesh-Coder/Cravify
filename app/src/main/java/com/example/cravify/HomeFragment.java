@@ -43,9 +43,10 @@ public class HomeFragment extends Fragment {
     private String username;
     private String address;
     private SearchView searchView;
-    private View noResultsView;
-    private ImageView noResultsImage;
+    private View noResultsView; // Add this
+    private ImageView noResultsImage; // Add this
     private TextView noResultsText;
+
 
 
     @Nullable
@@ -76,6 +77,7 @@ public class HomeFragment extends Fragment {
         }
 
         searchView = view.findViewById(R.id.rectangle_3);
+
         noResultsView = view.findViewById(R.id.no_results_view);
         noResultsImage = view.findViewById(R.id.no_results_image);
         noResultsText = view.findViewById(R.id.no_results_text);
@@ -206,6 +208,7 @@ public class HomeFragment extends Fragment {
             noResultsView.setVisibility(View.GONE);
         }
     }
+
 
     private String getFirstName(String username) {
         if (username != null && username.contains(".")) {

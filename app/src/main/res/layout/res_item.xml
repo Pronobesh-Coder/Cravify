@@ -20,32 +20,40 @@
         android:text="Restaurant Name"
         android:textColor="@color/black"
         android:fontFamily="@font/poppins_semibold"
-        android:textSize="15sp"
+        android:textSize="13sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/restaurant_cuisine"
-        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_light"
         android:layout_below="@id/restaurant_name"
         android:layout_toEndOf="@id/restaurant_image"
         android:layout_marginStart="16dp"
         android:text="Cuisine"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_light"
         android:textSize="8sp" />
 
     <TextView
         android:id="@+id/restaurant_address"
-        android:textColor="#474747"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/poppins_light"
         android:layout_below="@id/restaurant_cuisine"
         android:layout_toEndOf="@id/restaurant_image"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
         android:text="Address"
+        android:textColor="#474747"
+        android:fontFamily="@font/poppins_light"
         android:textSize="8sp" />
 
+    <ImageView
+        android:id="@+id/heart_icon"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/heart_outline" />
 </RelativeLayout>
