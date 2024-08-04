@@ -1,7 +1,6 @@
 package com.example.cravify;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     public RestaurantAdapter(List<Restaurant> restaurantList, Context context, OnItemClickListener onItemClickListener) {
         this.restaurantList = restaurantList;
-        this.context = context;
+        this.context = context.getApplicationContext(); // Use application context
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -41,9 +41,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         holder.cuisineTextView.setText(restaurant.getCuisine());
         holder.addressTextView.setText(restaurant.getAddress());
 
-        // Load image using Glide
+        // Load image using Glide with a placeholder and error handling
         Glide.with(context)
                 .load(restaurant.getImageUrl())
+                //.apply(new RequestOptions().placeholder(R.drawable.placeholder_image).error(R.drawable.error_image))
                 .into(holder.imageView);
 
         // Set click listener for the item view
@@ -52,6 +53,11 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 onItemClickListener.onItemClick(restaurant);
             }
         });
+    }
+
+    public void updateList(List<Restaurant> newList) {
+        restaurantList = newList;
+        notifyDataSetChanged();
     }
 
     @Override

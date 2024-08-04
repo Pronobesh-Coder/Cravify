@@ -1,13 +1,19 @@
 package com.example.cravify;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.appcompat.widget.SearchView;
+
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +23,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,8 +30,8 @@ import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnima
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -34,9 +39,13 @@ public class HomeFragment extends Fragment {
     private RecyclerView restaurantRecyclerView;
     private RestaurantAdapter restaurantAdapter;
     private List<Restaurant> restaurantList;
+    private List<Restaurant> filteredList = new ArrayList<>(); // Initialize the list
     private String username;
     private String address;
     private SearchView searchView;
+    private View noResultsView;
+    private ImageView noResultsImage;
+    private TextView noResultsText;
 
 
     @Nullable
@@ -66,6 +75,29 @@ public class HomeFragment extends Fragment {
             addressTextView.setText(address);
         }
 
+        searchView = view.findViewById(R.id.rectangle_3);
+        noResultsView = view.findViewById(R.id.no_results_view);
+        noResultsImage = view.findViewById(R.id.no_results_image);
+        noResultsText = view.findViewById(R.id.no_results_text);
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+            }
+        });
+
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_mag_icon);
+        ImageView closeIcon = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+        searchIcon.setColorFilter(Color.BLACK);
+        searchEditText.setTextColor(Color.BLACK);
+        closeIcon.setColorFilter(Color.BLACK);
+        searchEditText.setHint("Enter restaurant name or cuisine");
+        searchEditText.setHintTextColor(Color.GRAY);
+        searchEditText.setTextSize(15);
+
+
         SliderView sliderView;
         int[] images ={
                 R.drawable.image1,
@@ -75,6 +107,19 @@ public class HomeFragment extends Fragment {
         };
 
         sliderView = view.findViewById(R.id.imageSlider);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterRestaurants(newText);
+                return true;
+            }
+        });
 
         SliderAdapter sliderAdapter = new SliderAdapter(images);
         sliderView.setSliderAdapter(sliderAdapter);
@@ -130,6 +175,36 @@ public class HomeFragment extends Fragment {
                         Toast.makeText(getContext(), "Restaurant Not Found!", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void filterRestaurants(String query) {
+        if (filteredList == null) {
+            filteredList = new ArrayList<>();
+        } else {
+            filteredList.clear();
+        }
+        if (query.isEmpty()) {
+            filteredList.addAll(restaurantList);
+        } else {
+            for (Restaurant restaurant : restaurantList) {
+                if (restaurant.getName().toLowerCase().contains(query.toLowerCase()) ||
+                        restaurant.getCuisine().toLowerCase().contains(query.toLowerCase())) {
+                    filteredList.add(restaurant);
+                }
+            }
+        }
+        restaurantAdapter.updateList(filteredList);
+        checkNoResults();
+    }
+
+    private void checkNoResults() {
+        if (filteredList.isEmpty()) {
+            restaurantRecyclerView.setVisibility(View.GONE);
+            noResultsView.setVisibility(View.VISIBLE);
+        } else {
+            restaurantRecyclerView.setVisibility(View.VISIBLE);
+            noResultsView.setVisibility(View.GONE);
+        }
     }
 
     private String getFirstName(String username) {
