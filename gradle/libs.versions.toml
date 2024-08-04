@@ -14,8 +14,8 @@ firebaseAuth = "23.0.0"
 firebaseFirestore = "25.0.0"
 ccp = "2.5.3"
 firebaseStorage = "21.0.0"
-image_cropper = "2.8.0"
 autoimageslider = "1.4.0"
+androidexample = "1.0.1"
 
 
 
@@ -37,8 +37,10 @@ ccp = { group = "com.hbb20", name = "ccp", version.ref = "ccp" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.15.1" }
 glideCompiler = { group = "com.github.bumptech.glide", name = "compiler", version = "4.15.1" }
-android_image_cropper = { module = "com.theartofdev.edmodo:android-image-cropper", version.ref = "image_cropper" }
 autoimageslider = { group = "com.github.smarteist", name = "autoimageslider", version.ref = "autoimageslider" }
+androidexample = { module = "com.github.jitpack:android-example", version.ref = "androidexample" }
+
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
