@@ -1,0 +1,351 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f2f2f2"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_alignParentTop="true"
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="#fff9f0">
+
+        <!-- Back Arrow -->
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_back_arrow"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
+
+        <!-- Restaurant Name -->
+        <TextView
+            android:id="@+id/restaurant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/back_arrow"
+            android:layout_toRightOf="@id/back_arrow"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="Restaurant Name"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:fontFamily="@font/poppins_semibold"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <!-- Faded Gray Line -->
+    <View
+        android:id="@+id/gray_line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/top_bar"
+        android:background="#D3D3D3" />
+
+    <!-- Address Section -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gray_line1"
+        android:id="@+id/box_address"
+        android:padding="16dp"
+        android:background="@drawable/rounded_white_background">
+
+        <!-- Location Icon -->
+        <ImageView
+            android:id="@+id/location_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_location"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
+
+        <!-- Address -->
+        <TextView
+            android:id="@+id/restaurant_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_toEndOf="@id/location_icon"
+            android:layout_toRightOf="@id/location_icon"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="206/B, Jodhpur Gardens, Kolkata - 70045"
+            android:textSize="12sp"
+            android:fontFamily="@font/poppins_regular"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:layout_below="@id/box_address"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/proceed_to_pay_container"
+        android:paddingBottom="1dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp">
+
+            <!-- Existing layouts -->
+
+            <!-- Container for Back Arrow and Restaurant Info -->
+
+
+            <!-- RecyclerView Container with Rounded Background -->
+            <RelativeLayout
+                android:id="@+id/cart_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/restaurant_address"
+                android:layout_marginTop="30dp"
+                android:padding="16dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:background="@drawable/rounded_white_background2"
+                tools:ignore="NotSibling">
+
+                <!-- RecyclerView for Cart Items -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/cart_items_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- Add More Items Section -->
+                <TextView
+                    android:id="@+id/add_more_items"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cart_items_recycler_view"
+                    android:layout_marginTop="16dp"
+                    android:text="Add more items"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="#808080" />
+
+                <ImageView
+                    android:id="@+id/plus_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/cart_items_recycler_view"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/plus_icon" />
+            </RelativeLayout>
+
+            <!-- Bill Details Section -->
+            <RelativeLayout
+                android:id="@+id/bill_details_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cart_container"
+                android:layout_marginTop="16dp"
+                android:padding="16dp"
+                android:background="@drawable/rounded_white_background2">
+
+                <TextView
+                    android:id="@+id/bill_details_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bill Details"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textColor="#000000" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/bill_details_title"
+                    android:layout_marginTop="16dp"
+                    android:padding="16dp">
+
+                    <!-- Item Total -->
+                    <TextView
+                        android:id="@+id/item_total_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Item Total"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/poppins_regular" />
+
+                    <TextView
+                        android:id="@+id/item_total_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:text="₹370"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/poppins_semibold" />
+
+                    <!-- Delivery Fee -->
+                    <TextView
+                        android:id="@+id/delivery_fee_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/item_total_label"
+                        android:layout_marginTop="8dp"
+                        android:text="Delivery Fee"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/poppins_regular" />
+
+                    <TextView
+                        android:id="@+id/delivery_fee_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/item_total_price"
+                        android:layout_marginTop="8dp"
+                        android:text="₹40"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/poppins_semibold" />
+
+                    <!-- Separator Line -->
+                    <View
+                        android:id="@+id/line1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/delivery_fee_price"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="#D3D3D3" />
+
+                    <!-- Platform Fee -->
+                    <TextView
+                        android:id="@+id/platform_fee_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/line1"
+                        android:layout_marginTop="8dp"
+                        android:text="Platform Fee"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/poppins_regular" />
+
+                    <TextView
+                        android:id="@+id/platform_fee_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/line1"
+                        android:layout_marginTop="8dp"
+                        android:text="₹5"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/poppins_semibold" />
+
+                    <!-- GST and Restaurant Charges -->
+                    <TextView
+                        android:id="@+id/gst_charges_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/platform_fee_label"
+                        android:layout_marginTop="8dp"
+                        android:text="GST and Restaurant Charges"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/poppins_regular" />
+
+                    <TextView
+                        android:id="@+id/gst_charges_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/platform_fee_price"
+                        android:layout_marginTop="8dp"
+                        android:text="₹16"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/poppins_semibold" />
+
+                    <!-- Separator Line -->
+                    <View
+                        android:id="@+id/line2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/gst_charges_price"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="#D3D3D3" />
+
+                    <!-- To Pay -->
+                    <TextView
+                        android:id="@+id/to_pay_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/line2"
+                        android:layout_marginTop="8dp"
+                        android:text="To Pay"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/poppins_semibold" />
+
+                    <TextView
+                        android:id="@+id/to_pay_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/line2"
+                        android:layout_marginTop="8dp"
+                        android:text="₹431"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/poppins_semibold" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <!-- Avoid Cancellation Text -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/bill_details_container"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="Avoid cancellation as it leads to food wastage"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="#D3D3D3" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <!-- Total Price and Proceed to Pay Button -->
+    <RelativeLayout
+        android:id="@+id/proceed_to_pay_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp"
+        android:background="@drawable/rounded_white_background3">
+
+        <TextView
+            android:id="@+id/total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:text="₹431"
+            android:textSize="30dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/proceed_to_pay_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="16dp"
+            android:backgroundTint="#3f9e7a"
+            android:text="Proceed To Pay"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:fontFamily="@font/poppins_bold" />
+    </RelativeLayout>
+</RelativeLayout>

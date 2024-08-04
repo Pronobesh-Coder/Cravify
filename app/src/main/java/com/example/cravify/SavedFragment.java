@@ -34,7 +34,7 @@ public class SavedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_saved_fragment, container, false);
 
-        recyclerView = view.findViewById(R.id.saved_recyclerview);
+        recyclerView = view.findViewById(R.id.favorites_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new RestaurantAdapter(favouriteRestaurants, getContext(), restaurant -> {
             String fullAddress = restaurant.getAddress();
@@ -55,7 +55,7 @@ public class SavedFragment extends Fragment {
         });
         recyclerView.setAdapter(adapter);
 
-        noFavouritesLayout = view.findViewById(R.id.no_favourites_layout);
+        noFavouritesLayout = view.findViewById(R.id.no_favorites_layout);
 
         loadFavouriteRestaurants();
 
