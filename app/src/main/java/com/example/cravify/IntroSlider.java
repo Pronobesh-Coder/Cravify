@@ -52,7 +52,7 @@ public class IntroSlider extends AppCompatActivity {
         tvSkip = findViewById(R.id.tv_skip);
 
         final List<ScreenItem> mList = new ArrayList<>();
-        mList.add(new ScreenItem("Fresh Food, Always!", "Savor the taste of quality with every meal. Handpicked ingredients ensure your food is fresh and delicious, every single time!", R.drawable.slider_img1));
+        mList.add(new ScreenItem("Fresh Food, Always!", "Savour the taste of quality with every meal. Handpicked ingredients ensure your food is fresh and delicious, every single time!", R.drawable.slider_img1));
         mList.add(new ScreenItem("Lightning-Fast Delivery", "From our kitchen to your doorstep in record time. Enjoy piping hot meals delivered swiftly, right when you need them.", R.drawable.slider_img2));
         mList.add(new ScreenItem("Effortless Payments", "Seamless transactions for a stress-free experience. Our secure and easy payment options make ordering a breeze!", R.drawable.slider_img3));
 

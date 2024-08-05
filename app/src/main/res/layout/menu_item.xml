@@ -72,53 +72,98 @@
             android:scaleType="centerCrop"
             android:layout_gravity="center" />
 
-        <LinearLayout
-            android:id="@+id/addToCartLayout"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_gravity="bottom|center_horizontal"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:gravity="center_horizontal">
+
+            <!-- Add to Cart Button -->
 
             <Button
-                android:id="@+id/decrementButton"
+                android:id="@+id/addToCartButton"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="#E4A442"
+                android:fontFamily="@font/poppins_bold"
+                android:padding="8dp"
+                android:shadowColor="#555555"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"
+                android:text="ADD"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="8dp" />
+
+            <LinearLayout
+                android:id="@+id/capsule_background"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                android:layout_marginBottom="4dp"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="-"
-                android:textSize="12sp" />
+                android:layout_height="31.5dp"
+                android:orientation="horizontal"
+                android:background="@drawable/capsule_background"
+                android:layout_centerHorizontal="true"
+                android:gravity="center">
 
-            <TextView
-                android:id="@+id/itemCountText"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="1"
-                android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/decrease_quantity"
+                    android:layout_marginBottom="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="-"
+                    android:textSize="14sp"
+                    android:shadowColor="#555555"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:color/transparent" />
 
-            <Button
-                android:id="@+id/incrementButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="+"
-                android:textSize="12sp" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/quantity"
+                    android:layout_marginBottom="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="1"
+                    android:shadowColor="#555555"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:gravity="center"
+                    android:textColor="#FFFFFF"
+                    android:padding="8dp"
+                    android:background="@android:color/transparent" />
 
-        <Button
-            android:id="@+id/addToCartButton"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:backgroundTint="#E4A442"
-            android:fontFamily="@font/poppins_bold"
-            android:padding="8dp"
-            android:shadowColor="#555555"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="2"
-            android:text="ADD"
-            android:textSize="12sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="30dp" />
+                <TextView
+                    android:id="@+id/increase_quantity"
+                    android:layout_marginBottom="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="+"
+                    android:shadowColor="#555555"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:color/transparent" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
     </FrameLayout>
 </LinearLayout>
