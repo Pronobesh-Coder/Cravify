@@ -4,36 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f2f2f2"
-    tools:context=".MainActivity">
+    tools:context=".Cart">
 
     <RelativeLayout
         android:layout_alignParentTop="true"
         android:id="@+id/top_bar"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:background="#fff9f0">
-
-        <!-- Back Arrow -->
-        <ImageView
-            android:id="@+id/back_arrow"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_back_arrow"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true" />
+        android:background="#f2f2f2">
 
         <!-- Restaurant Name -->
         <TextView
             android:id="@+id/restaurant_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/back_arrow"
-            android:layout_toRightOf="@id/back_arrow"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="10dp"
             android:layout_marginLeft="16dp"
             android:text="Restaurant Name"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="15sp"
             android:fontFamily="@font/poppins_semibold"
@@ -69,7 +59,7 @@
 
         <!-- Address -->
         <TextView
-            android:id="@+id/restaurant_address"
+            android:id="@+id/user_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
@@ -77,6 +67,7 @@
             android:layout_toRightOf="@id/location_icon"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:textColor="@color/black"
             android:text="206/B, Jodhpur Gardens, Kolkata - 70045"
             android:textSize="12sp"
             android:fontFamily="@font/poppins_regular"
@@ -173,6 +164,7 @@
                         android:id="@+id/item_total_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="Item Total"
                         android:textSize="14sp"
                         android:fontFamily="@font/poppins_regular" />
@@ -181,6 +173,7 @@
                         android:id="@+id/item_total_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:text="₹370"
@@ -193,6 +186,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/item_total_label"
+                        android:textColor="@color/black"
                         android:layout_marginTop="8dp"
                         android:text="Delivery Fee"
                         android:textSize="14sp"
@@ -202,6 +196,7 @@
                         android:id="@+id/delivery_fee_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_below="@id/item_total_price"
@@ -227,6 +222,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/line1"
                         android:layout_marginTop="8dp"
+                        android:textColor="@color/black"
                         android:text="Platform Fee"
                         android:textSize="14sp"
                         android:fontFamily="@font/poppins_regular" />
@@ -239,6 +235,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_below="@id/line1"
                         android:layout_marginTop="8dp"
+                        android:textColor="@color/black"
                         android:text="₹5"
                         android:textSize="14sp"
                         android:fontFamily="@font/poppins_semibold" />
@@ -250,6 +247,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/platform_fee_label"
                         android:layout_marginTop="8dp"
+                        android:textColor="@color/black"
                         android:text="GST and Restaurant Charges"
                         android:textSize="14sp"
                         android:fontFamily="@font/poppins_regular" />
@@ -262,6 +260,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_below="@id/platform_fee_price"
                         android:layout_marginTop="8dp"
+                        android:textColor="@color/black"
                         android:text="₹16"
                         android:textSize="14sp"
                         android:fontFamily="@font/poppins_semibold" />
@@ -283,6 +282,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/line2"
                         android:layout_marginTop="8dp"
+                        android:textColor="@color/black"
                         android:text="To Pay"
                         android:textSize="14sp"
                         android:fontFamily="@font/poppins_semibold" />
@@ -296,6 +296,7 @@
                         android:layout_below="@id/line2"
                         android:layout_marginTop="8dp"
                         android:text="₹431"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                         android:fontFamily="@font/poppins_semibold" />
                 </RelativeLayout>
@@ -342,7 +343,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="16dp"
-            android:backgroundTint="#3f9e7a"
+            android:backgroundTint="#4CAF50"
             android:text="Proceed To Pay"
             android:textColor="#FFFFFF"
             android:textSize="14sp"

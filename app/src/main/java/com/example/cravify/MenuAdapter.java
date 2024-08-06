@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -20,10 +22,15 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     private List<MenuItem> menuItemList;
     private Resources resources;
+    private CartUpdateListener cartUpdateListener;
+    private int totalItemsInCart = 0;
+    private FirebaseFirestore db;
 
-    public MenuAdapter(List<MenuItem> menuItemList, Resources resources) {
+    public MenuAdapter(List<MenuItem> menuItemList, Resources resources, CartUpdateListener cartUpdateListener) {
         this.menuItemList = menuItemList;
         this.resources = resources;
+        this.cartUpdateListener = cartUpdateListener;
+        this.db = FirebaseFirestore.getInstance();
     }
 
     @NonNull
@@ -54,32 +61,88 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         Glide.with(holder.itemView.getContext()).load(menuItem.getImageUrl()).into(holder.imageView);
 
         holder.addToCartButton.setOnClickListener(v -> {
-            holder.addToCartButton.setVisibility(View.GONE);
-            holder.capsuleLayout.setVisibility(View.VISIBLE);
-            holder.quantityTextView.setText("1");
+            addToCart(menuItem, holder);
         });
 
         holder.incrementButton.setOnClickListener(v -> {
-            int currentCount = Integer.parseInt(holder.quantityTextView.getText().toString());
-            currentCount++;
-            holder.quantityTextView.setText(String.valueOf(currentCount));
+            updateQuantity(menuItem, holder, 1);
         });
 
         holder.decrementButton.setOnClickListener(v -> {
-            int currentCount = Integer.parseInt(holder.quantityTextView.getText().toString());
-            if (currentCount > 1) {
-                currentCount--;
-                holder.quantityTextView.setText(String.valueOf(currentCount));
-            } else {
-                holder.addToCartButton.setVisibility(View.VISIBLE);
-                holder.capsuleLayout.setVisibility(View.GONE);
-            }
+            updateQuantity(menuItem, holder, -1);
         });
     }
 
     @Override
     public int getItemCount() {
         return menuItemList.size();
+    }
+
+    private void addToCart(MenuItem menuItem, MenuViewHolder holder) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db.collection("users").document(userId).collection("cart")
+                .document(menuItem.getName()).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (!task.getResult().exists()) {
+                            db.collection("users").document(userId).collection("cart")
+                                    .document(menuItem.getName()).set(new CartItem(menuItem.getName(), menuItem.getType(), 1, menuItem.getPrice()))
+                                    .addOnSuccessListener(aVoid -> {
+                                        holder.addToCartButton.setVisibility(View.GONE);
+                                        holder.capsuleLayout.setVisibility(View.VISIBLE);
+                                        holder.quantityTextView.setText("1");
+                                        totalItemsInCart++;
+                                        cartUpdateListener.onCartUpdated(totalItemsInCart);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Handle error
+                                    });
+                        } else {
+                            holder.addToCartButton.setVisibility(View.GONE);
+                            holder.capsuleLayout.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+    }
+
+    private void updateQuantity(MenuItem menuItem, MenuViewHolder holder, int change) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db.collection("users").document(userId).collection("cart")
+                .document(menuItem.getName()).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().exists()) {
+                            CartItem cartItem = task.getResult().toObject(CartItem.class);
+                            int newQuantity = cartItem.getQuantity() + change;
+
+                            if (newQuantity > 0) {
+                                db.collection("users").document(userId).collection("cart")
+                                        .document(menuItem.getName()).update("quantity", newQuantity)
+                                        .addOnSuccessListener(aVoid -> {
+                                            holder.quantityTextView.setText(String.valueOf(newQuantity));
+                                            totalItemsInCart += change;
+                                            cartUpdateListener.onCartUpdated(totalItemsInCart);
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Handle error
+                                        });
+                            } else {
+                                db.collection("users").document(userId).collection("cart")
+                                        .document(menuItem.getName()).delete()
+                                        .addOnSuccessListener(aVoid -> {
+                                            holder.addToCartButton.setVisibility(View.VISIBLE);
+                                            holder.capsuleLayout.setVisibility(View.GONE);
+                                            holder.quantityTextView.setText("0");
+                                            totalItemsInCart -= cartItem.getQuantity(); // Adjust totalItemsInCart based on removed quantity
+                                            cartUpdateListener.onCartUpdated(totalItemsInCart);
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Handle error
+                                        });
+                            }
+                        }
+                    }
+                });
     }
 
     public static class MenuViewHolder extends RecyclerView.ViewHolder {
@@ -105,5 +168,9 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
             decrementButton = view.findViewById(R.id.decrease_quantity);
             quantityTextView = view.findViewById(R.id.quantity);
         }
+    }
+
+    public interface CartUpdateListener {
+        void onCartUpdated(int itemCount);
     }
 }

@@ -2,7 +2,10 @@ package com.example.cravify;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,11 +20,15 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestaurantMenuActivity extends AppCompatActivity {
+public class RestaurantMenuActivity extends AppCompatActivity implements MenuAdapter.CartUpdateListener {
 
     private RecyclerView menuRecyclerView;
     private MenuAdapter menuAdapter;
     private List<MenuItem> menuItemList;
+    private RelativeLayout cartButton;
+    private TextView cartItemCountTextView;
+    private int totalItemsInCart = 0;
+    private boolean isFirstDishAdded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,8 @@ public class RestaurantMenuActivity extends AppCompatActivity {
         TextView cuisineTextView = findViewById(R.id.restaurant_cuisine);
         TextView addressTextView = findViewById(R.id.restaurant_address);
         menuRecyclerView = findViewById(R.id.menu_recycler_view);
+        cartButton = findViewById(R.id.custom_cart_button);
+        cartItemCountTextView = findViewById(R.id.item_count);
 
         nameTextView.setText(restaurantName);
         cuisineTextView.setText(restaurantCuisine);
@@ -44,10 +53,17 @@ public class RestaurantMenuActivity extends AppCompatActivity {
 
         menuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         menuItemList = new ArrayList<>();
-        menuAdapter = new MenuAdapter(menuItemList,getResources());
+        menuAdapter = new MenuAdapter(menuItemList, getResources(), this);
         menuRecyclerView.setAdapter(menuAdapter);
 
         loadMenuItems(restaurantName);
+
+        // Set up OnClickListener for the cart button
+        cartButton.setOnClickListener(v -> {
+            Intent intent = new Intent(RestaurantMenuActivity.this, Cart.class);
+            intent.putExtra("restaurantName", restaurantName);
+            startActivity(intent);
+        });
     }
 
     private void loadMenuItems(String restaurantName) {
@@ -75,5 +91,41 @@ public class RestaurantMenuActivity extends AppCompatActivity {
                         Toast.makeText(RestaurantMenuActivity.this, "Failed to load menu items!", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    public void onCartUpdated(int itemCount) {
+        totalItemsInCart = itemCount;
+        if (totalItemsInCart > 0) {
+            cartButton.setVisibility(View.VISIBLE);
+
+            if (totalItemsInCart == 1) {
+                cartItemCountTextView.setText("1 dish added");
+                if (!isFirstDishAdded) {
+                    Animation fadeInSlideUp = AnimationUtils.loadAnimation(this, R.anim.fade_in_slide_up);
+                    cartButton.startAnimation(fadeInSlideUp);
+                    isFirstDishAdded = true;
+                }
+            } else {
+                cartItemCountTextView.setText(totalItemsInCart + " dishes added");
+            }
+        } else {
+            Animation fadeOutSlideDown = AnimationUtils.loadAnimation(this, R.anim.fade_out_slide_down);
+            fadeOutSlideDown.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    cartButton.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+            cartButton.startAnimation(fadeOutSlideDown);
+        }
     }
 }
