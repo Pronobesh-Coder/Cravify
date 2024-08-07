@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -27,10 +28,16 @@ public class Cart extends AppCompatActivity {
 
     private RecyclerView cartRecyclerView;
     private CartAdapter cartAdapter;
-    private List<CartItem> cartItemList;
+    private List<CartItem> cartItemList = new ArrayList<>();
     private FirebaseFirestore db;
     private TextView restaurantNameView;
     private TextView userAddressView;
+    private TextView itemTotalView;
+    private TextView totalPriceView;
+    private TextView toPayPriceView; // Added TextView for to_pay_price
+    private String restaurantName;
+    private TextView deliveryPrice, platformFee, gstFare;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,29 +45,33 @@ public class Cart extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cart);
 
-        // Initialize Firestore and Views
         db = FirebaseFirestore.getInstance();
         cartRecyclerView = findViewById(R.id.cart_items_recycler_view);
         restaurantNameView = findViewById(R.id.restaurant_name);
         userAddressView = findViewById(R.id.user_address);
+        itemTotalView = findViewById(R.id.item_total_price);
+        totalPriceView = findViewById(R.id.total_price);
+        toPayPriceView = findViewById(R.id.to_pay_price);
+        deliveryPrice = findViewById(R.id.delivery_fee_price);
+        platformFee = findViewById(R.id.platform_fee_price);
+        gstFare = findViewById(R.id.gst_charges_price);
 
-        // Initialize cart item list and adapter
-        cartItemList = new ArrayList<>();
-        cartAdapter = new CartAdapter(cartItemList, this);
+
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        cartAdapter = new CartAdapter(cartItemList, this);
         cartRecyclerView.setAdapter(cartAdapter);
 
         // Get restaurant name from intent
         Intent intent = getIntent();
-        String restaurantName = intent.getStringExtra("restaurantName");
+        restaurantName = intent.getStringExtra("restaurantName");
 
         if (restaurantName != null) {
             restaurantNameView.setText(restaurantName);
-            loadCartItems(restaurantName);
             fetchUserAddress();
         } else {
             restaurantNameView.setText("Restaurant not available");
         }
+        loadCartItems();
     }
 
     @Override
@@ -86,35 +97,20 @@ public class Cart extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        deleteCartItems();
+        // Check if app is truly closing
+        if (isAppClosing()) {
+            deleteCartItems();
+        }
     }
 
-
-    // Load cart items for the given restaurant
-    private void loadCartItems(String restaurantName) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db.collection("users").document(userId).collection("cart")
-                .whereEqualTo("restaurantName", restaurantName).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        cartItemList.clear();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String foodName = document.getString("name");
-                            String foodType = document.getString("type");
-                            int quantity = document.getLong("quantity") != null ? document.getLong("quantity").intValue() : 0;
-                            double price = document.getDouble("price") != null ? document.getDouble("price") : 0;
-
-                            if (foodName != null && foodType != null) {
-                                CartItem cartItem = new CartItem(foodName, foodType, quantity, price);
-                                cartItemList.add(cartItem);
-                            }
-                        }
-                        cartAdapter.notifyDataSetChanged();
-                    } else {
-                        Log.e("CartActivity", "Error loading cart items", task.getException());
-                        userAddressView.setText("Failed to load cart items");
-                    }
-                });
+    // Check if the app is actually closing
+    private boolean isAppClosing() {
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (activityManager != null) {
+            List<ActivityManager.AppTask> tasks = activityManager.getAppTasks();
+            return tasks.size() == 0;
+        }
+        return false;
     }
 
     // Fetch user address from Firestore
@@ -138,18 +134,63 @@ public class Cart extends AppCompatActivity {
 
     // Delete cart items from Firestore
     private void deleteCartItems() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = currentUser.getUid();
         db.collection("users").document(userId).collection("cart").get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            document.getReference().delete()
-                                    .addOnSuccessListener(aVoid -> Log.d("CartActivity", "DocumentSnapshot successfully deleted!"))
-                                    .addOnFailureListener(e -> Log.e("CartActivity", "Error deleting document", e));
-                        }
-                    } else {
-                        Log.e("CartActivity", "Error getting documents.", task.getException());
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        document.getReference().delete();
                     }
+                })
+                .addOnFailureListener(e -> Log.e("CartActivity", "Error deleting cart items", e));
+    }
+
+    public void updateTotalPrice() {
+        double itemTotal = 0;
+        for (CartItem item : cartItemList) {
+            itemTotal += item.getPrice() * item.getQuantity();
+        }
+
+        if (itemTotal == 0) {
+            itemTotalView.setText("₹0");
+            totalPriceView.setText("₹0");
+            toPayPriceView.setText("₹0");
+            deliveryPrice.setText("₹0");
+            platformFee.setText("₹0");
+            gstFare.setText("₹0");
+
+        } else {
+            double deliveryFee = 40;
+            double platformFee = 5;
+            double gstAndCharges = 16;
+            double totalAmount = itemTotal + deliveryFee + platformFee + gstAndCharges;
+
+            itemTotalView.setText("₹" + itemTotal); // Update item total
+            totalPriceView.setText("₹" + totalAmount); // Update total price
+            toPayPriceView.setText("₹" + totalAmount); // Update to pay price
+        }
+    }
+
+    // Load cart items and initialize cartAdapter
+    private void loadCartItems() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = currentUser.getUid();
+        db.collection("users").document(userId).collection("cart").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    cartItemList.clear();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        String foodName = document.getString("name");
+                        String foodType = document.getString("type");
+                        int quantity = document.getLong("quantity") != null ? document.getLong("quantity").intValue() : 0;
+                        double price = document.getDouble("price") != null ? document.getDouble("price") : 0;
+
+                        if (foodName != null && foodType != null) {
+                            CartItem cartItem = new CartItem(foodName, foodType, quantity, price);
+                            cartItemList.add(cartItem);
+                        }
+                    }
+                    cartAdapter.notifyDataSetChanged();
+                    updateTotalPrice(); // Initialize total price
                 });
     }
 }
