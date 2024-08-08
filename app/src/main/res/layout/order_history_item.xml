@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="10dp"
+    android:background="#FFFFFF"
+    android:gravity="center_vertical">
+
+    <!-- Left side: icon and text details -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <!-- Food Name -->
+        <TextView
+            android:id="@+id/order_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food Name"
+            android:textSize="15sp"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="#000000"
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:id="@+id/order_item_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:text="Veg/NonVeg"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_semibold"/>
+
+        <!-- Food Price -->
+        <TextView
+            android:id="@+id/order_item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="₹370"
+            android:textSize="12sp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="#000000"
+            android:paddingTop="4dp" />
+
+        <!-- Quantity -->
+        <TextView
+            android:id="@+id/order_item_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantity: 2"
+            android:textSize="12sp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="#727272"
+            android:paddingTop="4dp" />
+    </LinearLayout>
+
+    <!-- Right side: image -->
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/order_item_image"
+            android:layout_width="125dp"
+            android:layout_height="100dp"
+            android:src="@drawable/logo"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center" />
+    </FrameLayout>
+</LinearLayout>
