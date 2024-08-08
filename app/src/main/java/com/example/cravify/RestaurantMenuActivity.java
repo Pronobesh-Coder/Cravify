@@ -1,10 +1,12 @@
 package com.example.cravify;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,10 +28,20 @@ public class RestaurantMenuActivity extends AppCompatActivity implements MenuAda
     private MenuAdapter menuAdapter;
     private List<MenuItem> menuItemList;
     private RelativeLayout cartButton;
-    private TextView cartItemCountTextView;
-    private int totalItemsInCart = 0;
     private boolean isFirstDishAdded = false;
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Get restaurant name from intent
+        String restaurantName = getIntent().getStringExtra("restaurantName");
+
+        // Refresh menu items
+        loadMenuItems(restaurantName);
+    }
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +57,6 @@ public class RestaurantMenuActivity extends AppCompatActivity implements MenuAda
         TextView addressTextView = findViewById(R.id.restaurant_address);
         menuRecyclerView = findViewById(R.id.menu_recycler_view);
         cartButton = findViewById(R.id.custom_cart_button);
-        cartItemCountTextView = findViewById(R.id.item_count);
 
         nameTextView.setText(restaurantName);
         cuisineTextView.setText(restaurantCuisine);
@@ -95,19 +106,12 @@ public class RestaurantMenuActivity extends AppCompatActivity implements MenuAda
 
     @Override
     public void onCartUpdated(int itemCount) {
-        totalItemsInCart = itemCount;
-        if (totalItemsInCart > 0) {
+        if (itemCount > 0) {
             cartButton.setVisibility(View.VISIBLE);
-
-            if (totalItemsInCart == 1) {
-                cartItemCountTextView.setText("1 dish added");
-                if (!isFirstDishAdded) {
-                    Animation fadeInSlideUp = AnimationUtils.loadAnimation(this, R.anim.fade_in_slide_up);
-                    cartButton.startAnimation(fadeInSlideUp);
-                    isFirstDishAdded = true;
-                }
-            } else {
-                cartItemCountTextView.setText(totalItemsInCart + " dishes added");
+            if (itemCount == 1 && !isFirstDishAdded) {
+                Animation fadeInSlideUp = AnimationUtils.loadAnimation(this, R.anim.fade_in_slide_up);
+                cartButton.startAnimation(fadeInSlideUp);
+                isFirstDishAdded = true;
             }
         } else {
             Animation fadeOutSlideDown = AnimationUtils.loadAnimation(this, R.anim.fade_out_slide_down);

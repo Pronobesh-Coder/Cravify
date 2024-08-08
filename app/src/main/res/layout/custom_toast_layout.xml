@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="10dp"
+    android:background="@drawable/bottom_nav_bg2">
+
+    <ImageView
+        android:id="@+id/toast_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/cravi_man" />
+
+    <TextView
+        android:id="@+id/toast_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:gravity="center"
+        android:padding="15dp"
+        android:paddingTop="8dp"
+        android:shadowColor="#555555"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
+        android:text="CraviMan is on his way to deliver your order!"
+        android:textColor="#ffffff"
+        android:textSize="12sp" />
+
+</LinearLayout>

@@ -250,8 +250,10 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
 
     @Override
     public void onPaymentSuccess(String razorpayPaymentID) {
-        Toast.makeText(this, "Payment Successful: " + razorpayPaymentID, Toast.LENGTH_SHORT).show();
-        // Handle post-payment actions (e.g., update order status, clear cart, etc.)
+        Toast.makeText(this, "Payment Successful!", Toast.LENGTH_SHORT).show();
+
+        // Handle post-payment actions
+        clearCartAndNavigateHome();
     }
 
     @Override
@@ -259,4 +261,28 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
         Toast.makeText(this, "Payment Failed: " + response, Toast.LENGTH_SHORT).show();
         // Handle payment failure (e.g., retry, show error message, etc.)
     }
+
+
+    private void clearCartAndNavigateHome() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            db.collection("users").document(userId).collection("cart").get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            document.getReference().delete();
+                        }
+                        navigateToHome();
+                    })
+                    .addOnFailureListener(e -> Log.e("CartActivity", "Error deleting cart items", e));
+        }
+    }
+
+    private void navigateToHome() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("payment_successful", true); // Pass the flag to MainActivity
+        startActivity(intent);
+    }
+
 }

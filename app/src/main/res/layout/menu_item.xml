@@ -7,16 +7,12 @@
     android:background="#FFFFFF"
     android:gravity="center_vertical">
 
-    <!-- Left side: icon and text details -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:orientation="vertical">
 
-        <!-- Non-veg Icon -->
-
-        <!-- Food Name -->
         <TextView
             android:id="@+id/menu_item_name"
             android:layout_width="wrap_content"
@@ -36,7 +32,6 @@
             android:textColor="@color/black"
             android:fontFamily="@font/poppins_semibold"/>
 
-        <!-- Food Price -->
         <TextView
             android:id="@+id/menu_item_price"
             android:layout_width="wrap_content"
@@ -47,7 +42,6 @@
             android:textColor="#000000"
             android:paddingTop="4dp" />
 
-        <!-- Food Description -->
         <TextView
             android:id="@+id/menu_item_description"
             android:layout_width="wrap_content"
@@ -58,7 +52,7 @@
             android:textColor="#727272"
             android:paddingTop="4dp" />
     </LinearLayout>
-    <!-- Right side: image and button -->
+
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -72,15 +66,12 @@
             android:scaleType="centerCrop"
             android:layout_gravity="center" />
 
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="bottom|center_horizontal"
             android:gravity="center_horizontal">
-
-            <!-- Add to Cart Button -->
 
             <Button
                 android:id="@+id/addToCartButton"
@@ -99,70 +90,23 @@
                 android:textColor="@color/white"
                 android:layout_marginTop="8dp" />
 
-            <LinearLayout
-                android:id="@+id/capsule_background"
-                android:layout_marginTop="12dp"
+            <Button
+                android:id="@+id/addedToCartButton"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
                 android:visibility="gone"
-                android:layout_marginBottom="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="31.5dp"
-                android:orientation="horizontal"
-                android:background="@drawable/capsule_background"
                 android:layout_centerHorizontal="true"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/decrease_quantity"
-                    android:layout_marginBottom="2dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:text="-"
-                    android:textSize="14sp"
-                    android:shadowColor="#555555"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="2"
-                    android:fontFamily="@font/poppins_bold"
-                    android:textColor="#FFFFFF"
-                    android:gravity="center"
-                    android:padding="8dp"
-                    android:background="@android:color/transparent" />
-
-                <TextView
-                    android:id="@+id/quantity"
-                    android:layout_marginBottom="2dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:text="1"
-                    android:shadowColor="#555555"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="2"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:gravity="center"
-                    android:textColor="#FFFFFF"
-                    android:padding="8dp"
-                    android:background="@android:color/transparent" />
-
-                <TextView
-                    android:id="@+id/increase_quantity"
-                    android:layout_marginBottom="2dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:text="+"
-                    android:shadowColor="#555555"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="2"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:textColor="#FFFFFF"
-                    android:gravity="center"
-                    android:padding="8dp"
-                    android:background="@android:color/transparent" />
-            </LinearLayout>
-
+                android:backgroundTint="#E4A442"
+                android:fontFamily="@font/poppins_bold"
+                android:padding="8dp"
+                android:shadowColor="#555555"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"
+                android:text="ADDED"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="8dp" />
 
         </RelativeLayout>
     </FrameLayout>

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,17 +61,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         holder.priceTextView.setText(String.format("₹ %.1f", menuItem.getPrice()));
         Glide.with(holder.itemView.getContext()).load(menuItem.getImageUrl()).into(holder.imageView);
 
-        holder.addToCartButton.setOnClickListener(v -> {
-            addToCart(menuItem, holder);
-        });
-
-        holder.incrementButton.setOnClickListener(v -> {
-            updateQuantity(menuItem, holder, 1);
-        });
-
-        holder.decrementButton.setOnClickListener(v -> {
-            updateQuantity(menuItem, holder, -1);
-        });
+        holder.addToCartButton.setOnClickListener(v -> addToCart(menuItem, holder));
     }
 
     @Override
@@ -88,9 +79,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
                             db.collection("users").document(userId).collection("cart")
                                     .document(menuItem.getName()).set(new CartItem(menuItem.getName(), menuItem.getType(), 1, menuItem.getPrice()))
                                     .addOnSuccessListener(aVoid -> {
-                                        holder.addToCartButton.setVisibility(View.GONE);
-                                        holder.capsuleLayout.setVisibility(View.VISIBLE);
-                                        holder.quantityTextView.setText("1");
+                                        holder.addToCartButton.setText("Added");
+                                        holder.addToCartButton.setEnabled(false); // Disable button to prevent re-clicks
                                         totalItemsInCart++;
                                         cartUpdateListener.onCartUpdated(totalItemsInCart);
                                     })
@@ -98,52 +88,14 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
                                         // Handle error
                                     });
                         } else {
-                            holder.addToCartButton.setVisibility(View.GONE);
-                            holder.capsuleLayout.setVisibility(View.VISIBLE);
+                            Toast.makeText(holder.itemView.getContext(), "Dish Already Added!", Toast.LENGTH_SHORT).show();
+                            holder.addToCartButton.setEnabled(false); // Disable button to prevent re-clicks
                         }
                     }
                 });
     }
 
-    private void updateQuantity(MenuItem menuItem, MenuViewHolder holder, int change) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db.collection("users").document(userId).collection("cart")
-                .document(menuItem.getName()).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        if (task.getResult().exists()) {
-                            CartItem cartItem = task.getResult().toObject(CartItem.class);
-                            int newQuantity = cartItem.getQuantity() + change;
 
-                            if (newQuantity > 0) {
-                                db.collection("users").document(userId).collection("cart")
-                                        .document(menuItem.getName()).update("quantity", newQuantity)
-                                        .addOnSuccessListener(aVoid -> {
-                                            holder.quantityTextView.setText(String.valueOf(newQuantity));
-                                            totalItemsInCart += change;
-                                            cartUpdateListener.onCartUpdated(totalItemsInCart);
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            // Handle error
-                                        });
-                            } else {
-                                db.collection("users").document(userId).collection("cart")
-                                        .document(menuItem.getName()).delete()
-                                        .addOnSuccessListener(aVoid -> {
-                                            holder.addToCartButton.setVisibility(View.VISIBLE);
-                                            holder.capsuleLayout.setVisibility(View.GONE);
-                                            holder.quantityTextView.setText("0");
-                                            totalItemsInCart -= cartItem.getQuantity(); // Adjust totalItemsInCart based on removed quantity
-                                            cartUpdateListener.onCartUpdated(totalItemsInCart);
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            // Handle error
-                                        });
-                            }
-                        }
-                    }
-                });
-    }
 
     public static class MenuViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
@@ -151,9 +103,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         public TextView descriptionTextView;
         public TextView priceTextView;
         public ImageView imageView;
-        public Button addToCartButton;
+        public Button addToCartButton, addedToCartButton;
         public LinearLayout capsuleLayout;
-        public TextView incrementButton, decrementButton, quantityTextView;
 
         public MenuViewHolder(View view) {
             super(view);
@@ -163,10 +114,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
             priceTextView = view.findViewById(R.id.menu_item_price);
             imageView = view.findViewById(R.id.menu_item_image);
             addToCartButton = view.findViewById(R.id.addToCartButton);
-            capsuleLayout = view.findViewById(R.id.capsule_background);
-            incrementButton = view.findViewById(R.id.increase_quantity);
-            decrementButton = view.findViewById(R.id.decrease_quantity);
-            quantityTextView = view.findViewById(R.id.quantity);
+            addedToCartButton = view.findViewById(R.id.addedToCartButton);
         }
     }
 

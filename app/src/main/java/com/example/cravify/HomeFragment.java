@@ -3,6 +3,7 @@ package com.example.cravify;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
@@ -33,56 +36,29 @@ public class HomeFragment extends Fragment {
     private RecyclerView restaurantRecyclerView;
     private RestaurantAdapter restaurantAdapter;
     private List<Restaurant> restaurantList;
-    private List<Restaurant> filteredList = new ArrayList<>(); // Initialize the list
-    private String username;
-    private String address;
+    private List<Restaurant> filteredList = new ArrayList<>();
     private SearchView searchView;
-    private View noResultsView; // Add this
-    private ImageView noResultsImage; // Add this
+    private View noResultsView;
+    private ImageView noResultsImage;
     private TextView noResultsText;
-
-
+    private TextView greetingTextView;
+    private TextView addressTextView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_home_fragment, container, false);
 
-        if (getArguments() != null) {
-            username = getArguments().getString("username");
-            address = getArguments().getString("address");
-        } else {
-            // Use defaults or retrieve from preferences
-            username = "User";
-            address = "Not available";
-        }
-
-        String firstName = getFirstName(username);
-        firstName = capitalizeFirstLetter(firstName);
-
-        TextView greetingTextView = view.findViewById(R.id.username_crave);
-        if (greetingTextView != null) {
-            greetingTextView.setText("Hello! " + firstName + ", What are you craving today?");
-        }
-
-        TextView addressTextView = view.findViewById(R.id.current_location_txt);
-        if (addressTextView != null) {
-            addressTextView.setText(address);
-        }
-
+        // Initialize views
+        greetingTextView = view.findViewById(R.id.username_crave);
+        addressTextView = view.findViewById(R.id.current_location_txt);
         searchView = view.findViewById(R.id.rectangle_3);
-
         noResultsView = view.findViewById(R.id.no_results_view);
         noResultsImage = view.findViewById(R.id.no_results_image);
         noResultsText = view.findViewById(R.id.no_results_text);
 
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchView.setIconified(false);
-            }
-        });
-
+        // Setup SearchView
+        searchView.setOnClickListener(v -> searchView.setIconified(false));
         EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_mag_icon);
         ImageView closeIcon = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
@@ -93,16 +69,37 @@ public class HomeFragment extends Fragment {
         searchEditText.setHintTextColor(Color.GRAY);
         searchEditText.setTextSize(15);
 
+        // Setup SliderView
+        SliderView sliderView = view.findViewById(R.id.imageSlider);
+        int[] images = { R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4 };
+        SliderAdapter sliderAdapter = new SliderAdapter(images);
+        sliderView.setSliderAdapter(sliderAdapter);
+        sliderView.setIndicatorAnimation(IndicatorAnimationType.DROP);
+        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+        sliderView.startAutoCycle();
 
-        SliderView sliderView;
-        int[] images ={
-                R.drawable.image1,
-                R.drawable.image2,
-                R.drawable.image3,
-                R.drawable.image4
-        };
+        // Setup RecyclerView
+        restaurantRecyclerView = view.findViewById(R.id.restaurant_recyclerview);
+        restaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        restaurantList = new ArrayList<>();
+        restaurantAdapter = new RestaurantAdapter(restaurantList, getContext(), restaurant -> {
+            String fullAddress = restaurant.getAddress();
+            String[] addressParts = fullAddress.split(",");
+            String addressPart = addressParts.length > 2 ? addressParts[2].trim() : "";
+            Intent intent = new Intent(getActivity(), RestaurantMenuActivity.class);
+            intent.putExtra("restaurantName", restaurant.getName());
+            intent.putExtra("restaurantCuisine", restaurant.getCuisine());
+            intent.putExtra("restaurantAddress", addressPart);
+            startActivity(intent);
+        });
+        restaurantRecyclerView.setAdapter(restaurantAdapter);
 
-        sliderView = view.findViewById(R.id.imageSlider);
+        // Load restaurant data
+        loadRestaurantData();
+        checkPaymentSuccess();
+
+        // Fetch user data
+        fetchUserData();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -117,38 +114,9 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        SliderAdapter sliderAdapter = new SliderAdapter(images);
-        sliderView.setSliderAdapter(sliderAdapter);
-        sliderView.setIndicatorAnimation(IndicatorAnimationType.DROP);
-        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
-        sliderView.startAutoCycle();
-
-        restaurantRecyclerView = view.findViewById(R.id.restaurant_recyclerview);
-        restaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        restaurantList = new ArrayList<>();
-        restaurantAdapter = new RestaurantAdapter(restaurantList, getContext(), restaurant -> {
-            String fullAddress = restaurant.getAddress();
-            String[] addressParts = fullAddress.split(",");
-
-            String addressPart = "";
-            if (addressParts.length > 3) {
-                addressPart = addressParts[2].trim() + "," + addressParts[3].trim();
-            } else if (addressParts.length > 2) {
-                addressPart = addressParts[2].trim();
-            }
-
-            Intent intent = new Intent(getActivity(), RestaurantMenuActivity.class);
-            intent.putExtra("restaurantName", restaurant.getName());
-            intent.putExtra("restaurantCuisine", restaurant.getCuisine());
-            intent.putExtra("restaurantAddress", addressPart);
-            startActivity(intent);
-        });
-        restaurantRecyclerView.setAdapter(restaurantAdapter);
-
-        loadRestaurantData();
-
         return view;
     }
+
     private void loadRestaurantData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("restaurants").get()
@@ -171,6 +139,41 @@ public class HomeFragment extends Fragment {
                         Toast.makeText(getContext(), "Restaurant Not Found!", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void checkPaymentSuccess() {
+        if (getActivity() != null) {
+            Intent intent = getActivity().getIntent();
+            if (intent.getBooleanExtra("payment_successful", false)) {
+                showCustomToast();
+                intent.putExtra("payment_successful", false);
+            }
+        }
+    }
+
+    private void fetchUserData() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("users").document(userId).get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            String username = task.getResult().getString("Name");
+                            String address = task.getResult().getString("Address");
+                            updateUI(username, address);
+                        } else {
+                            Toast.makeText(getContext(), "Failed to load user data", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Toast.makeText(getContext(), "No user logged in", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateUI(String username, String address) {
+        greetingTextView.setText("Hello! " + username + ", What are you craving today?");
+        addressTextView.setText(address != null ? address : "Address not available");
     }
 
     private void filterRestaurants(String query) {
@@ -203,18 +206,25 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private void showCustomToast() {
+        LayoutInflater inflater = getLayoutInflater();
+        View customToastView = inflater.inflate(R.layout.custom_toast_layout, null);
 
-    private String getFirstName(String username) {
-        if (username != null && username.contains(".")) {
-            return username.split("\\.")[0];
-        }
-        return username != null ? username : "User";
+        ImageView toastImage = customToastView.findViewById(R.id.toast_image);
+        TextView toastText = customToastView.findViewById(R.id.toast_text);
+
+        final Toast toast = new Toast(getContext());
+        toast.setDuration(Toast.LENGTH_LONG); // Default duration
+        toast.setView(customToastView);
+
+        // Show the toast
+        toast.show();
+
+        // Use Handler to remove the toast after 6 seconds
+        new Handler().postDelayed(() -> {
+            toast.cancel(); // Hide the toast
+        }, 6000); // 6000 milliseconds = 6 seconds
     }
 
-    private String capitalizeFirstLetter(String name) {
-        if (name == null || name.isEmpty()) {
-            return "";
-        }
-        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
-    }
+
 }

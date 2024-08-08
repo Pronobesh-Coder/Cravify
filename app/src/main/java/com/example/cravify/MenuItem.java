@@ -7,12 +7,14 @@ public class MenuItem {
     private double price;
     private String imageUrl;
 
+
     public MenuItem(String name, String description, String type, double price, String imageUrl) {
         this.name = name;
         this.description = description;
         this.type = type;
         this.price = price;
         this.imageUrl = imageUrl;
+
     }
 
     public String getName() {

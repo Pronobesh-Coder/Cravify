@@ -109,16 +109,11 @@
         android:layout_gravity="end|top"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/item_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1 Item added"
-            android:fontFamily="@font/poppins_light"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"/>
+            android:src="@drawable/baseline_shopping_cart_24"/>
 
         <TextView
             android:id="@+id/view_cart"
