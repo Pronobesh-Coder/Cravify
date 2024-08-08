@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Razorpay SDK ProGuard Rules
+-keep class com.razorpay.** { *; }
+-dontwarn com.razorpay.**

@@ -50,6 +50,7 @@ dependencies {
     annotationProcessor(libs.glideCompiler)
     implementation(libs.androidexample)
     testImplementation(libs.junit)
+    implementation("com.razorpay:checkout:1.6.25")
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }

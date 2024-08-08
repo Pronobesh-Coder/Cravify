@@ -346,6 +346,7 @@
             android:backgroundTint="#4CAF50"
             android:text="Proceed To Pay"
             android:textColor="#FFFFFF"
+            android:onClick="startRazor"
             android:textSize="14sp"
             android:fontFamily="@font/poppins_bold" />
     </RelativeLayout>

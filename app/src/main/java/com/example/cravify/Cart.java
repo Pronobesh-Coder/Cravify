@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,11 +18,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cart extends AppCompatActivity {
+public class Cart extends AppCompatActivity implements PaymentResultListener {
 
     private static final String PREFS_NAME = "AppPrefs";
     private static final String KEY_APP_BACKGROUND = "AppInBackground";
@@ -34,10 +39,9 @@ public class Cart extends AppCompatActivity {
     private TextView userAddressView;
     private TextView itemTotalView;
     private TextView totalPriceView;
-    private TextView toPayPriceView; // Added TextView for to_pay_price
+    private TextView toPayPriceView;
     private String restaurantName;
     private TextView deliveryPrice, platformFee, gstFare;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,18 +49,11 @@ public class Cart extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cart);
 
+        // Initialize Firestore and Views
         db = FirebaseFirestore.getInstance();
-        cartRecyclerView = findViewById(R.id.cart_items_recycler_view);
-        restaurantNameView = findViewById(R.id.restaurant_name);
-        userAddressView = findViewById(R.id.user_address);
-        itemTotalView = findViewById(R.id.item_total_price);
-        totalPriceView = findViewById(R.id.total_price);
-        toPayPriceView = findViewById(R.id.to_pay_price);
-        deliveryPrice = findViewById(R.id.delivery_fee_price);
-        platformFee = findViewById(R.id.platform_fee_price);
-        gstFare = findViewById(R.id.gst_charges_price);
+        initializeViews();
 
-
+        // Set up RecyclerView
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         cartAdapter = new CartAdapter(cartItemList, this);
         cartRecyclerView.setAdapter(cartAdapter);
@@ -71,78 +68,95 @@ public class Cart extends AppCompatActivity {
         } else {
             restaurantNameView.setText("Restaurant not available");
         }
+
         loadCartItems();
+
+        // Initialize Razorpay
+        Checkout.preload(getApplicationContext());
+
+        // Start payment process when ready (e.g., on a button click)
+        findViewById(R.id.proceed_to_pay_button).setOnClickListener(v -> startPayment());
+    }
+
+    private void initializeViews() {
+        cartRecyclerView = findViewById(R.id.cart_items_recycler_view);
+        restaurantNameView = findViewById(R.id.restaurant_name);
+        userAddressView = findViewById(R.id.user_address);
+        itemTotalView = findViewById(R.id.item_total_price);
+        totalPriceView = findViewById(R.id.total_price);
+        toPayPriceView = findViewById(R.id.to_pay_price);
+        deliveryPrice = findViewById(R.id.delivery_fee_price);
+        platformFee = findViewById(R.id.platform_fee_price);
+        gstFare = findViewById(R.id.gst_charges_price);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // Mark app as in background
-        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(KEY_APP_BACKGROUND, true);
-        editor.apply();
+        setAppInBackground(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Mark app as not in background
+        setAppInBackground(false);
+    }
+
+    private void setAppInBackground(boolean inBackground) {
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(KEY_APP_BACKGROUND, false);
+        editor.putBoolean(KEY_APP_BACKGROUND, inBackground);
         editor.apply();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Check if app is truly closing
         if (isAppClosing()) {
             deleteCartItems();
         }
     }
 
-    // Check if the app is actually closing
     private boolean isAppClosing() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         if (activityManager != null) {
             List<ActivityManager.AppTask> tasks = activityManager.getAppTasks();
-            return tasks.size() == 0;
+            return tasks.isEmpty();
         }
         return false;
     }
 
-    // Fetch user address from Firestore
     private void fetchUserAddress() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db.collection("users").document(userId).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        String address = task.getResult().getString("Address");
-                        if (address != null) {
-                            userAddressView.setText(address);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            db.collection("users").document(userId).get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            String address = task.getResult().getString("Address");
+                            userAddressView.setText(address != null ? address : "Address not available");
                         } else {
-                            userAddressView.setText("Address not available");
+                            Log.e("CartActivity", "Error fetching user address", task.getException());
+                            userAddressView.setText("Failed to load address");
                         }
-                    } else {
-                        Log.e("CartActivity", "Error fetching user address", task.getException());
-                        userAddressView.setText("Failed to load address");
-                    }
-                });
+                    });
+        } else {
+            userAddressView.setText("User not authenticated");
+        }
     }
 
-    // Delete cart items from Firestore
     private void deleteCartItems() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        String userId = currentUser.getUid();
-        db.collection("users").document(userId).collection("cart").get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        document.getReference().delete();
-                    }
-                })
-                .addOnFailureListener(e -> Log.e("CartActivity", "Error deleting cart items", e));
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            db.collection("users").document(userId).collection("cart").get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            document.getReference().delete();
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("CartActivity", "Error deleting cart items", e));
+        }
     }
 
     public void updateTotalPrice() {
@@ -161,36 +175,88 @@ public class Cart extends AppCompatActivity {
 
         } else {
             double deliveryFee = 40;
-            double platformFee = 5;
+            double platformFeeAmount = 5;
             double gstAndCharges = 16;
-            double totalAmount = itemTotal + deliveryFee + platformFee + gstAndCharges;
+            double totalAmount = itemTotal + deliveryFee + platformFeeAmount + gstAndCharges;
 
-            itemTotalView.setText("₹" + itemTotal); // Update item total
-            totalPriceView.setText("₹" + totalAmount); // Update total price
-            toPayPriceView.setText("₹" + totalAmount); // Update to pay price
+            itemTotalView.setText("₹" + itemTotal);
+            totalPriceView.setText("₹" + totalAmount);
+            toPayPriceView.setText("₹" + totalAmount);
+            deliveryPrice.setText("₹" + deliveryFee);
+            platformFee.setText("₹" + platformFeeAmount);
+            gstFare.setText("₹" + gstAndCharges);
         }
     }
 
-    // Load cart items and initialize cartAdapter
     private void loadCartItems() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        String userId = currentUser.getUid();
-        db.collection("users").document(userId).collection("cart").get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    cartItemList.clear();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        String foodName = document.getString("name");
-                        String foodType = document.getString("type");
-                        int quantity = document.getLong("quantity") != null ? document.getLong("quantity").intValue() : 0;
-                        double price = document.getDouble("price") != null ? document.getDouble("price") : 0;
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            db.collection("users").document(userId).collection("cart").get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        cartItemList.clear();
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            String foodName = document.getString("name");
+                            String foodType = document.getString("type");
+                            int quantity = document.getLong("quantity") != null ? document.getLong("quantity").intValue() : 0;
+                            double price = document.getDouble("price") != null ? document.getDouble("price") : 0;
 
-                        if (foodName != null && foodType != null) {
-                            CartItem cartItem = new CartItem(foodName, foodType, quantity, price);
-                            cartItemList.add(cartItem);
+                            if (foodName != null && foodType != null) {
+                                CartItem cartItem = new CartItem(foodName, foodType, quantity, price);
+                                cartItemList.add(cartItem);
+                            }
                         }
-                    }
-                    cartAdapter.notifyDataSetChanged();
-                    updateTotalPrice(); // Initialize total price
-                });
+                        cartAdapter.notifyDataSetChanged();
+                        updateTotalPrice(); // Initialize total price
+                    })
+                    .addOnFailureListener(e -> Log.e("CartActivity", "Error loading cart items", e));
+        }
+    }
+
+    private void startPayment() {
+        Checkout checkout = new Checkout();
+        checkout.setKeyID("rzp_test_NxWtUm8DUtS0U9");  // Replace with your actual key ID from Razorpay dashboard
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            try {
+                JSONObject options = new JSONObject();
+
+                // Set the payment details
+                options.put("name", "Cravify");
+                options.put("description", "Payment for your order");
+                options.put("currency", "INR");
+
+                // Convert amount to paise (Razorpay expects the amount in paise)
+                double totalAmount = Double.parseDouble(toPayPriceView.getText().toString().replace("₹", "")) * 100;
+                options.put("amount", totalAmount);
+
+                // Add prefill data (optional)
+                options.put("prefill.email", currentUser.getEmail());
+                options.put("prefill.contact", "");  // Add user contact if available
+
+                // Open Razorpay Checkout
+                checkout.open(this, options);
+
+            } catch (Exception e) {
+                Log.e("Razorpay", "Error in starting payment", e);
+            }
+        } else {
+            Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onPaymentSuccess(String razorpayPaymentID) {
+        Toast.makeText(this, "Payment Successful: " + razorpayPaymentID, Toast.LENGTH_SHORT).show();
+        // Handle post-payment actions (e.g., update order status, clear cart, etc.)
+    }
+
+    @Override
+    public void onPaymentError(int code, String response) {
+        Toast.makeText(this, "Payment Failed: " + response, Toast.LENGTH_SHORT).show();
+        // Handle payment failure (e.g., retry, show error message, etc.)
     }
 }
