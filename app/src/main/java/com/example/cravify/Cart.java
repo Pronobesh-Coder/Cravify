@@ -24,7 +24,9 @@ import com.razorpay.PaymentResultListener;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Cart extends AppCompatActivity implements PaymentResultListener {
 
@@ -252,6 +254,8 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
     public void onPaymentSuccess(String razorpayPaymentID) {
         Toast.makeText(this, "Payment Successful!", Toast.LENGTH_SHORT).show();
 
+        storeOrderHistory();
+
         // Handle post-payment actions
         clearCartAndNavigateHome();
     }
@@ -283,6 +287,30 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("payment_successful", true); // Pass the flag to MainActivity
         startActivity(intent);
+    }
+
+    private void storeOrderHistory() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            for (CartItem item : cartItemList) {
+                // Create a map for order data
+                Map<String, Object> orderData = new HashMap<>();
+                orderData.put("name", item.getName());
+                orderData.put("type", item.getType());
+                orderData.put("price", item.getPrice());
+                orderData.put("quantity", item.getQuantity());
+
+                // Save to Firestore
+                db.collection("users").document(userId)
+                        .collection("order_history")
+                        .add(orderData)
+                        .addOnSuccessListener(documentReference -> {
+                            Log.d("CartActivity", "Order added to history");
+                        })
+                        .addOnFailureListener(e -> Log.e("CartActivity", "Error adding order to history", e));
+            }
+        }
     }
 
 }

@@ -56,19 +56,4 @@
             android:textColor="#727272"
             android:paddingTop="4dp" />
     </LinearLayout>
-
-    <!-- Right side: image -->
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
-
-        <ImageView
-            android:id="@+id/order_item_image"
-            android:layout_width="125dp"
-            android:layout_height="100dp"
-            android:src="@drawable/logo"
-            android:scaleType="centerCrop"
-            android:layout_gravity="center" />
-    </FrameLayout>
 </LinearLayout>
