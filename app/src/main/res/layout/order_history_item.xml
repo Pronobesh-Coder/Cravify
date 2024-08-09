@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:padding="20dp"
     android:layout_margin="10dp"
-    android:background="#FFFFFF"
+    android:background="@drawable/bottom_nav_bg"
     android:gravity="center_vertical">
 
     <!-- Left side: icon and text details -->
