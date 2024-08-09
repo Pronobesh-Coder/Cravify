@@ -21,7 +21,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // TODO(developer): Handle FCM messages here.
 
         if (remoteMessage.getNotification()!=null){
             String notificationBody = remoteMessage.getNotification().getBody();
