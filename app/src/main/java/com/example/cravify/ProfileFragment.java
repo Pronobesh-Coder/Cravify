@@ -62,7 +62,6 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        // Initialize UI elements
         profileImageView = view.findViewById(R.id.profile_image);
         logoutButton = view.findViewById(R.id.logout_button);
         favouritesButton = view.findViewById(R.id.my_favorites_item);
@@ -133,7 +132,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadProfileImage(String imageUrl) {
-        // Load the image and apply circle crop
         Glide.with(this)
                 .load(imageUrl)
                 .circleCrop()
@@ -304,7 +302,6 @@ public class ProfileFragment extends Fragment {
         dialog.setOnShowListener(dialogInterface -> {
             int currentMode = getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
 
-            // Get dialog buttons
             Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
             TextView titleView = ((TextView) dialog.findViewById(android.R.id.title));
@@ -334,18 +331,15 @@ public class ProfileFragment extends Fragment {
             if (task.isSuccessful()) {
                 Log.d(TAG, "Profile image deleted from storage");
 
-                // Delete user document from Firestore
                 db.collection("users").document(userId).delete().addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()) {
                         Log.d(TAG, "User document deleted from Firestore");
 
-                        // Delete user from Firebase Authentication
                         mAuth.getCurrentUser().delete().addOnCompleteListener(task2 -> {
                             if (task2.isSuccessful()) {
                                 Log.d(TAG, "User deleted from Firebase Authentication");
                                 Toast.makeText(getContext(), "Account deleted successfully", Toast.LENGTH_SHORT).show();
 
-                                // Redirect to login screen
                                 Intent intent = new Intent(getContext(), UserLogin.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);

@@ -50,8 +50,5 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.Holder> {
             imageView = itemView.findViewById(R.id.image_slide);
 
         }
-
-
     }
-
 }

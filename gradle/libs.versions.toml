@@ -16,6 +16,7 @@ ccp = "2.5.3"
 firebaseStorage = "21.0.0"
 autoimageslider = "1.4.0"
 androidexample = "1.0.1"
+firebaseMessaging = "24.0.0"
 
 
 
@@ -39,6 +40,7 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.15.1
 glideCompiler = { group = "com.github.bumptech.glide", name = "compiler", version = "4.15.1" }
 autoimageslider = { group = "com.github.smarteist", name = "autoimageslider", version.ref = "autoimageslider" }
 androidexample = { module = "com.github.jitpack:android-example", version.ref = "androidexample" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 
 
 

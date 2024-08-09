@@ -6,7 +6,6 @@ public class CartItem {
     private int quantity;
     private double price;
 
-    // No-argument constructor required for Firestore
     public CartItem() {
     }
 

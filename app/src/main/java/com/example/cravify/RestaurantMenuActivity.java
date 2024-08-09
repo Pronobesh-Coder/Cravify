@@ -34,10 +34,8 @@ public class RestaurantMenuActivity extends AppCompatActivity implements MenuAda
     @Override
     protected void onResume() {
         super.onResume();
-        // Get restaurant name from intent
         String restaurantName = getIntent().getStringExtra("restaurantName");
 
-        // Refresh menu items
         loadMenuItems(restaurantName);
     }
 
@@ -69,7 +67,6 @@ public class RestaurantMenuActivity extends AppCompatActivity implements MenuAda
 
         loadMenuItems(restaurantName);
 
-        // Set up OnClickListener for the cart button
         cartButton.setOnClickListener(v -> {
             Intent intent = new Intent(RestaurantMenuActivity.this, Cart.class);
             intent.putExtra("restaurantName", restaurantName);

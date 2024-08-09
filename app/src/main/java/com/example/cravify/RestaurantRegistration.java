@@ -102,7 +102,6 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_restaurant_registration);
 
-        // Initialize UI elements
         nameEditText = findViewById(R.id.name);
         cuisineEditText = findViewById(R.id.cuisine);
         phoneEditText = findViewById(R.id.phone);
@@ -114,8 +113,8 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
         registerButton = findViewById(R.id.register_button);
         btn_back = findViewById(R.id.back);
         progressBar = findViewById(R.id.progBar);
-        ccp = findViewById(R.id.country_code); // Initialize CountryCodePicker
-        ccp.registerCarrierNumberEditText(phoneEditText); // Bind phoneEditText to CountryCodePicker
+        ccp = findViewById(R.id.country_code);
+        ccp.registerCarrierNumberEditText(phoneEditText);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -123,19 +122,16 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
         storageRef = storage.getReference();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Initialize the Places SDK
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), getString(R.string.google_maps_key));
         }
 
-        // Initialize the AutocompleteSupportFragment
         autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         if (autocompleteFragment != null) {
             autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
 
-            // Change the text color and size programmatically
             autocompleteFragment.getView().post(() -> {
                 View view = autocompleteFragment.getView();
                 if (view != null) {
@@ -150,7 +146,7 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
                                     EditText autocompleteTextView = (EditText) innerChild;
                                     autocompleteTextView.setTextColor(ContextCompat.getColor(this, android.R.color.black));
                                     autocompleteTextView.setHintTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
-                                    autocompleteTextView.setTextSize(13); // Set text size to 13sp
+                                    autocompleteTextView.setTextSize(13);
                                 }
                             }
                         }
@@ -161,7 +157,6 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
-                    // Get the place's details and update the map
                     LatLng latLng = place.getLatLng();
                     if (latLng != null) {
                         selectedLocation = latLng;
@@ -181,14 +176,12 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
             });
         }
 
-        // Set up Google Maps
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_fragment);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
 
-        // Set up image upload button click listener
         uploadImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,7 +189,6 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
             }
         });
 
-        // Set up register button click listener
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,7 +205,6 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
             }
         });
 
-        // Request location permissions if not already granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
@@ -320,7 +311,6 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(RestaurantRegistration.this, "Registration successful!", Toast.LENGTH_SHORT).show();
 
-                        // Save login state
                         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("isLoggedIn", true);
@@ -329,7 +319,6 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
                         editor.putString("cuisine", cuisine);
                         editor.apply();
 
-                        // Navigate to the main activity
                         Intent intent = new Intent(RestaurantRegistration.this, RestaurantDashboard.class);
                         intent.putExtra("res_name", email.split("@")[0]);
                         intent.putExtra("address", address);
@@ -353,7 +342,7 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
             fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
-                    currentLocation = location; // Store the current location
+                    currentLocation = location;
                     if (location != null && mMap != null) {
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                         mMap.clear();
@@ -364,7 +353,6 @@ public class RestaurantRegistration extends AppCompatActivity implements OnMapRe
                 }
             });
         } else {
-            // Permission is not granted
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }

@@ -4,9 +4,8 @@ public class Restaurant {
     private String Name;
     private String Cuisine;
     private String ImageUrl;
-    private String Address; // New field
+    private String Address;
 
-    // Required empty constructor
     public Restaurant() {
     }
 

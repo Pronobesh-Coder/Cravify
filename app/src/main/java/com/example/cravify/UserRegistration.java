@@ -94,19 +94,16 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
         setContentView(R.layout.activity_user_registration);
         EdgeToEdge.enable(this);
 
-        // Initialize the Places SDK
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), getString(R.string.google_maps_key));
         }
 
-        // Initialize the AutocompleteSupportFragment
         autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         if (autocompleteFragment != null) {
             autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
 
-            // Change the text color and size programmatically
             autocompleteFragment.getView().post(() -> {
                 View view = autocompleteFragment.getView();
                 if (view != null) {
@@ -121,7 +118,7 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
                                     EditText autocompleteTextView = (EditText) innerChild;
                                     autocompleteTextView.setTextColor(ContextCompat.getColor(this, android.R.color.black));
                                     autocompleteTextView.setHintTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
-                                    autocompleteTextView.setTextSize(13); // Set text size to 13sp
+                                    autocompleteTextView.setTextSize(13);
                                 }
                             }
                         }
@@ -132,7 +129,6 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
-                    // Get the place's details and update the map
                     LatLng latLng = place.getLatLng();
                     if (latLng != null) {
                         selectedLocation = latLng;
@@ -152,7 +148,6 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
             });
         }
 
-        // Initialize Views
         btn_back = findViewById(R.id.back);
         Name = findViewById(R.id.name);
         Age = findViewById(R.id.age);
@@ -169,21 +164,18 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
         db = FirebaseFirestore.getInstance();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Set up Google Maps
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_fragment);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
 
-        // Handle back button click
         btn_back.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), UserLogin.class);
             startActivity(intent);
             finish();
         });
 
-        // Handle register button click
         Regis.setOnClickListener(view -> {
             String email = Email.getText().toString().trim();
             String password = Password.getText().toString().trim();
@@ -213,7 +205,6 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
                                         if (firebaseUser != null) {
                                             String userId = firebaseUser.getUid();
                                             String fullPhone = ccp.getFullNumberWithPlus();
-                                            //int age = Integer.parseInt(stringAge);
 
                                             Map<String, Object> user = new HashMap<>();
                                             user.put("Name", name);
@@ -228,7 +219,6 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
                                                 user.put("Location", locationToStore);
                                             }
 
-                                            // Use userId as the document ID
                                             db.collection("users").document(userId).set(user)
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
@@ -236,7 +226,7 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
                                                             Toast.makeText(getApplicationContext(), "Details Added!", Toast.LENGTH_SHORT).show();
                                                             Intent intent = new Intent(UserRegistration.this, MainActivity.class);
                                                             intent.putExtra("username", firebaseUser.getEmail().split("@")[0]);
-                                                            intent.putExtra("address", address); // Pass the address
+                                                            intent.putExtra("address", address);
                                                             startActivity(intent);
                                                             finish();
                                                         }
@@ -262,7 +252,6 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
             }
         });
 
-        // Request location permissions if not already granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -272,7 +261,6 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-    // Request location permissions result
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -285,7 +273,6 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-    // Get current location
     private void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -315,7 +302,6 @@ public class UserRegistration extends AppCompatActivity implements OnMapReadyCal
                 });
     }
 
-    // Initialize map
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;

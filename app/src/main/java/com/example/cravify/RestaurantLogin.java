@@ -112,7 +112,6 @@ public class RestaurantLogin extends AppCompatActivity {
                                 String cuisine = document.getString("Cuisine");
                                 String address = document.getString("Address");
 
-                                // Save data to SharedPreferences
                                 SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putBoolean("isLoggedIn", true);
@@ -121,7 +120,6 @@ public class RestaurantLogin extends AppCompatActivity {
                                 editor.putString("cuisine", cuisine);
                                 editor.apply();
 
-                                // Navigate to the main activity
                                 Intent intent = new Intent(RestaurantLogin.this, RestaurantDashboard.class);
                                 intent.putExtra("res_name", restaurantName);
                                 intent.putExtra("address", address);

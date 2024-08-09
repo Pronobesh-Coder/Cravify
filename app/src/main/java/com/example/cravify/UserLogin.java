@@ -1,16 +1,17 @@
 package com.example.cravify;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -32,6 +33,7 @@ public class UserLogin extends AppCompatActivity {
 
     private static final String TAG = "UserLogin";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 2;
 
     private EditText emailField, passwordField;
     private Button loginButton;
@@ -48,28 +50,21 @@ public class UserLogin extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Initialize Views
         emailField = findViewById(R.id.email);
         passwordField = findViewById(R.id.password);
         loginButton = findViewById(R.id.login_button);
         progressBar = findViewById(R.id.progBar);
 
-        // Check if user is already logged in
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             progressBar.setVisibility(View.VISIBLE);
-            Toast.makeText(getApplicationContext(),"Logging you in...",Toast.LENGTH_SHORT).show();
-            // User is logged in, fetch user details and navigate to MainActivity
+            Toast.makeText(getApplicationContext(), "Logging you in...", Toast.LENGTH_SHORT).show();
             fetchUserDetails(currentUser.getEmail());
-            return; // Exit onCreate early
+            return;
         }
 
-        // Location Permission Check
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-        }
+        requestLocationPermission();
 
-        // Set up click listeners
         findViewById(R.id.go_regis_login).setOnClickListener(view -> {
             startActivity(new Intent(getApplicationContext(), UserRegistration.class));
             finish();
@@ -103,7 +98,6 @@ public class UserLogin extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     progressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()) {
-                        // Fetch user address and navigate to MainActivity
                         fetchUserDetails(email);
                     } else {
                         Toast.makeText(getApplicationContext(), "Login Failed!", Toast.LENGTH_SHORT).show();
@@ -131,6 +125,7 @@ public class UserLogin extends AppCompatActivity {
                     }
                 });
     }
+
     private void saveUserDetails(String username, String address) {
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -138,7 +133,6 @@ public class UserLogin extends AppCompatActivity {
         editor.putString("address", address);
         editor.apply();
     }
-
 
     private void navigateToMainActivity(String username, String address) {
         Intent intent = new Intent(UserLogin.this, MainActivity.class);
@@ -148,14 +142,38 @@ public class UserLogin extends AppCompatActivity {
         finish();
     }
 
+    private void requestLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            requestNotificationPermission();
+        }
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_PERMISSION_REQUEST_CODE);
+            }
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Location permission granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Granted", Toast.LENGTH_SHORT).show();
+                requestNotificationPermission();
             } else {
                 Toast.makeText(this, "Location permission is required for some features", Toast.LENGTH_SHORT).show();
+                requestNotificationPermission();
+            }
+        } else if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Notification permission is required to receive alerts", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -49,7 +49,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_home_fragment, container, false);
 
-        // Initialize views
         greetingTextView = view.findViewById(R.id.username_crave);
         addressTextView = view.findViewById(R.id.current_location_txt);
         searchView = view.findViewById(R.id.rectangle_3);
@@ -57,7 +56,6 @@ public class HomeFragment extends Fragment {
         noResultsImage = view.findViewById(R.id.no_results_image);
         noResultsText = view.findViewById(R.id.no_results_text);
 
-        // Setup SearchView
         searchView.setOnClickListener(v -> searchView.setIconified(false));
         EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_mag_icon);
@@ -69,7 +67,6 @@ public class HomeFragment extends Fragment {
         searchEditText.setHintTextColor(Color.GRAY);
         searchEditText.setTextSize(15);
 
-        // Setup SliderView
         SliderView sliderView = view.findViewById(R.id.imageSlider);
         int[] images = { R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4 };
         SliderAdapter sliderAdapter = new SliderAdapter(images);
@@ -78,7 +75,6 @@ public class HomeFragment extends Fragment {
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.startAutoCycle();
 
-        // Setup RecyclerView
         restaurantRecyclerView = view.findViewById(R.id.restaurant_recyclerview);
         restaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         restaurantList = new ArrayList<>();
@@ -94,11 +90,9 @@ public class HomeFragment extends Fragment {
         });
         restaurantRecyclerView.setAdapter(restaurantAdapter);
 
-        // Load restaurant data
         loadRestaurantData();
         checkPaymentSuccess();
 
-        // Fetch user data
         fetchUserData();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -214,17 +208,13 @@ public class HomeFragment extends Fragment {
         TextView toastText = customToastView.findViewById(R.id.toast_text);
 
         final Toast toast = new Toast(getContext());
-        toast.setDuration(Toast.LENGTH_LONG); // Default duration
+        toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(customToastView);
 
-        // Show the toast
         toast.show();
 
-        // Use Handler to remove the toast after 6 seconds
         new Handler().postDelayed(() -> {
-            toast.cancel(); // Hide the toast
-        }, 6000); // 6000 milliseconds = 6 seconds
+            toast.cancel();
+        }, 6000);
     }
-
-
 }

@@ -28,13 +28,13 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     private List<Restaurant> restaurantList;
     private Context context;
     private OnItemClickListener onItemClickListener;
-    private Set<String> likedRestaurants = new HashSet<>(); // Track liked restaurants
+    private Set<String> likedRestaurants = new HashSet<>();
 
     public RestaurantAdapter(List<Restaurant> restaurantList, Context context, OnItemClickListener onItemClickListener) {
         this.restaurantList = restaurantList;
-        this.context = context.getApplicationContext(); // Use application context
+        this.context = context.getApplicationContext();
         this.onItemClickListener = onItemClickListener;
-        loadLikedRestaurants(); // Load the liked restaurants when the adapter is created
+        loadLikedRestaurants();
     }
 
     @NonNull
@@ -51,29 +51,25 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         holder.cuisineTextView.setText(restaurant.getCuisine());
         holder.addressTextView.setText(restaurant.getAddress());
 
-        // Load image using Glide
         Glide.with(context)
                 .load(restaurant.getImageUrl())
                 .into(holder.imageView);
 
-        // Set heart icon state
-        boolean isLiked = likedRestaurants.contains(restaurant.getName()); // Use restaurant name or ID
+        boolean isLiked = likedRestaurants.contains(restaurant.getName());
         holder.heartIcon.setImageResource(isLiked ? R.drawable.heart_filled : R.drawable.heart_outline);
 
-        // Set click listener for the item view
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(restaurant);
             }
         });
 
-        // Set click listener for the heart icon
         holder.heartIcon.setOnClickListener(v -> {
-            if (likedRestaurants.contains(restaurant.getName())) { // Use restaurant name or ID
-                removeFavouriteRestaurant(restaurant.getName()); // Use restaurant ID or name
+            if (likedRestaurants.contains(restaurant.getName())) {
+                removeFavouriteRestaurant(restaurant.getName());
                 holder.heartIcon.setImageResource(R.drawable.heart_outline);
             } else {
-                addToFavourites(restaurant.getName()); // Use restaurant ID or name
+                addToFavourites(restaurant.getName());
                 holder.heartIcon.setImageResource(R.drawable.heart_filled);
             }
         });
@@ -94,7 +90,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         TextView cuisineTextView;
         TextView addressTextView;
         ImageView imageView;
-        ImageView heartIcon; // Added heart icon ImageView
+        ImageView heartIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,11 +98,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             cuisineTextView = itemView.findViewById(R.id.restaurant_cuisine);
             addressTextView = itemView.findViewById(R.id.restaurant_address);
             imageView = itemView.findViewById(R.id.restaurant_image);
-            heartIcon = itemView.findViewById(R.id.heart_icon); // Initialize heart icon
+            heartIcon = itemView.findViewById(R.id.heart_icon);
         }
     }
 
-    // Interface for handling item clicks
     public interface OnItemClickListener {
         void onItemClick(Restaurant restaurant);
     }
@@ -123,8 +118,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
         db.collection("users").document(userId)
                 .collection("favourites")
-                .document(restaurantName) // Store the restaurant name as the document ID
-                .set(new HashMap<>()) // Set an empty document or some metadata if needed
+                .document(restaurantName)
+                .set(new HashMap<>())
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show();
                 })
@@ -142,7 +137,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("users").document(userId)
-                .collection("favourites").document(restaurantName) // Use restaurant name as document ID
+                .collection("favourites").document(restaurantName)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
@@ -162,9 +157,9 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        likedRestaurants.add(documentSnapshot.getId()); // Add each document ID to the set
+                        likedRestaurants.add(documentSnapshot.getId());
                     }
-                    notifyDataSetChanged(); // Refresh the UI with the liked restaurants
+                    notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to load favourites", Toast.LENGTH_SHORT).show();

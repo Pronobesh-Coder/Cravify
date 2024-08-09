@@ -80,7 +80,7 @@ public class SavedFragment extends Fragment {
                     favouriteRestaurants.clear();
 
                     if (queryDocumentSnapshots.isEmpty()) {
-                        toggleNoFavouritesMessage(); // No favourites, update UI
+                        toggleNoFavouritesMessage();
                         return;
                     }
 
@@ -89,7 +89,7 @@ public class SavedFragment extends Fragment {
                         Log.d("SavedFragment", "Fetching restaurant with name: " + restaurantName);
 
                         db.collection("restaurants")
-                                .whereEqualTo("Name", restaurantName) // Query by restaurant name
+                                .whereEqualTo("Name", restaurantName)
                                 .get()
                                 .addOnSuccessListener(querySnapshot -> {
                                     if (!querySnapshot.isEmpty()) {
@@ -104,19 +104,19 @@ public class SavedFragment extends Fragment {
                                     } else {
                                         Log.d("SavedFragment", "Restaurant not found: " + restaurantName);
                                     }
-                                    toggleNoFavouritesMessage(); // Update UI after adding restaurants
+                                    toggleNoFavouritesMessage();
                                 })
                                 .addOnFailureListener(e -> {
                                     Log.e("SavedFragment", "Failed to load restaurant details for name: " + restaurantName, e);
                                     Toast.makeText(getContext(), "Failed to load restaurant details", Toast.LENGTH_SHORT).show();
-                                    toggleNoFavouritesMessage(); // Update UI on failure
+                                    toggleNoFavouritesMessage();
                                 });
                     }
                 })
                 .addOnFailureListener(e -> {
                     Log.e("SavedFragment", "Failed to load favourites", e);
                     Toast.makeText(getContext(), "Failed to load favourites", Toast.LENGTH_SHORT).show();
-                    toggleNoFavouritesMessage(); // Update UI on failure
+                    toggleNoFavouritesMessage();
                 });
     }
 

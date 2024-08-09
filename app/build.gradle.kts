@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.glide)
     implementation(libs.autoimageslider)
+    implementation(libs.firebase.messaging)
     annotationProcessor(libs.glideCompiler)
     implementation(libs.androidexample)
     testImplementation(libs.junit)

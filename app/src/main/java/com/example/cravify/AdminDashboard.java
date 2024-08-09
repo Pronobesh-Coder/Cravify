@@ -91,7 +91,6 @@ public class AdminDashboard extends AppCompatActivity {
                         Map<String, String> user = new HashMap<>();
                         user.put("name", document.getString("Name"));
 
-                        // Handle the age field conversion
                         Object ageObj = document.get("Age");
                         if (ageObj != null) {
                             user.put("age", ageObj.toString());

@@ -42,11 +42,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         Resources resources = context.getResources();
         int color;
         if ("Veg".equalsIgnoreCase(cartItem.getType())) {
-            color = resources.getColor(R.color.green, null); // Dark green color
+            color = resources.getColor(R.color.green, null);
         } else if ("Non-Veg".equalsIgnoreCase(cartItem.getType())) {
-            color = resources.getColor(R.color.red, null); // Red color
+            color = resources.getColor(R.color.red, null);
         } else {
-            color = resources.getColor(R.color.black, null); // Default color
+            color = resources.getColor(R.color.black, null);
         }
 
         holder.foodNameTextView.setText(cartItem.getName());
@@ -56,7 +56,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
         holder.foodTypeTextView.setTextColor(color);
 
-        // Set click listeners for quantity buttons
         holder.increaseQuantityTextView.setOnClickListener(v -> updateQuantity(holder.getAdapterPosition(), cartItem.getQuantity() + 1));
         holder.decreaseQuantityTextView.setOnClickListener(v -> {
             if (cartItem.getQuantity() > 1) {
@@ -66,7 +65,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             }
         });
 
-        // Set click listener for item
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 int pos = holder.getAdapterPosition();
@@ -82,19 +80,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         cartItem.setQuantity(newQuantity);
         notifyItemChanged(position);
 
-        // Update the quantity in Firestore
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(userId).collection("cart").document(cartItem.getName())
                 .update("quantity", newQuantity)
                 .addOnSuccessListener(aVoid -> {
-                    // Update total price in the activity
                     if (context instanceof Cart) {
                         ((Cart) context).updateTotalPrice();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    // Handle the error
                 });
     }
 
@@ -104,19 +99,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, cartItemList.size());
 
-        // Remove the item from Firestore
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(userId).collection("cart").document(cartItem.getName())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    // Update total price in the activity
                     if (context instanceof Cart) {
                         ((Cart) context).updateTotalPrice();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    // Handle the error
                 });
     }
 
@@ -125,7 +117,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         return cartItemList.size();
     }
 
-    // Set the click listener for items
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }

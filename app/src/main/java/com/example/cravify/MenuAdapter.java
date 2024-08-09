@@ -47,11 +47,11 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
         int color;
         if ("Veg".equalsIgnoreCase(menuItem.getType())) {
-            color = resources.getColor(R.color.green, null); // Dark green color
+            color = resources.getColor(R.color.green, null);
         } else if ("Non-Veg".equalsIgnoreCase(menuItem.getType())) {
-            color = resources.getColor(R.color.red, null); // Red color
+            color = resources.getColor(R.color.red, null);
         } else {
-            color = resources.getColor(R.color.black, null); // Default color
+            color = resources.getColor(R.color.black, null);
         }
 
         holder.nameTextView.setText(menuItem.getName());
@@ -80,16 +80,15 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
                                     .document(menuItem.getName()).set(new CartItem(menuItem.getName(), menuItem.getType(), 1, menuItem.getPrice()))
                                     .addOnSuccessListener(aVoid -> {
                                         holder.addToCartButton.setText("Added");
-                                        holder.addToCartButton.setEnabled(false); // Disable button to prevent re-clicks
+                                        holder.addToCartButton.setEnabled(false);
                                         totalItemsInCart++;
                                         cartUpdateListener.onCartUpdated(totalItemsInCart);
                                     })
                                     .addOnFailureListener(e -> {
-                                        // Handle error
                                     });
                         } else {
                             Toast.makeText(holder.itemView.getContext(), "Dish Already Added!", Toast.LENGTH_SHORT).show();
-                            holder.addToCartButton.setEnabled(false); // Disable button to prevent re-clicks
+                            holder.addToCartButton.setEnabled(false);
                         }
                     }
                 });
@@ -104,7 +103,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         public TextView priceTextView;
         public ImageView imageView;
         public Button addToCartButton, addedToCartButton;
-        public LinearLayout capsuleLayout;
 
         public MenuViewHolder(View view) {
             super(view);

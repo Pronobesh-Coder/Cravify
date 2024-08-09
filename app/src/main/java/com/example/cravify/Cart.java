@@ -51,16 +51,13 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cart);
 
-        // Initialize Firestore and Views
         db = FirebaseFirestore.getInstance();
         initializeViews();
 
-        // Set up RecyclerView
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         cartAdapter = new CartAdapter(cartItemList, this);
         cartRecyclerView.setAdapter(cartAdapter);
 
-        // Get restaurant name from intent
         Intent intent = getIntent();
         restaurantName = intent.getStringExtra("restaurantName");
 
@@ -73,10 +70,8 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
 
         loadCartItems();
 
-        // Initialize Razorpay
         Checkout.preload(getApplicationContext());
 
-        // Start payment process when ready (e.g., on a button click)
         findViewById(R.id.proceed_to_pay_button).setOnClickListener(v -> startPayment());
     }
 
@@ -209,7 +204,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
                             }
                         }
                         cartAdapter.notifyDataSetChanged();
-                        updateTotalPrice(); // Initialize total price
+                        updateTotalPrice();
                     })
                     .addOnFailureListener(e -> Log.e("CartActivity", "Error loading cart items", e));
         }
@@ -217,7 +212,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
 
     private void startPayment() {
         Checkout checkout = new Checkout();
-        checkout.setKeyID("rzp_test_NxWtUm8DUtS0U9");  // Replace with your actual key ID from Razorpay dashboard
+        checkout.setKeyID("rzp_test_NxWtUm8DUtS0U9");
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -226,20 +221,16 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
             try {
                 JSONObject options = new JSONObject();
 
-                // Set the payment details
                 options.put("name", "Cravify");
                 options.put("description", "Payment for your order");
                 options.put("currency", "INR");
 
-                // Convert amount to paise (Razorpay expects the amount in paise)
                 double totalAmount = Double.parseDouble(toPayPriceView.getText().toString().replace("₹", "")) * 100;
                 options.put("amount", totalAmount);
 
-                // Add prefill data (optional)
                 options.put("prefill.email", currentUser.getEmail());
                 options.put("prefill.contact", "");  // Add user contact if available
 
-                // Open Razorpay Checkout
                 checkout.open(this, options);
 
             } catch (Exception e) {
@@ -256,14 +247,12 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
 
         storeOrderHistory();
 
-        // Handle post-payment actions
         clearCartAndNavigateHome();
     }
 
     @Override
     public void onPaymentError(int code, String response) {
         Toast.makeText(this, "Payment Failed: " + response, Toast.LENGTH_SHORT).show();
-        // Handle payment failure (e.g., retry, show error message, etc.)
     }
 
 
@@ -294,14 +283,12 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
         if (currentUser != null) {
             String userId = currentUser.getUid();
             for (CartItem item : cartItemList) {
-                // Create a map for order data
                 Map<String, Object> orderData = new HashMap<>();
                 orderData.put("name", item.getName());
                 orderData.put("type", item.getType());
                 orderData.put("price", item.getPrice());
                 orderData.put("quantity", item.getQuantity());
 
-                // Save to Firestore
                 db.collection("users").document(userId)
                         .collection("order_history")
                         .add(orderData)
@@ -312,5 +299,4 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
             }
         }
     }
-
 }

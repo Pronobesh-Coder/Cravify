@@ -41,7 +41,6 @@ public class RestaurantDashboard extends AppCompatActivity {
         setContentView(R.layout.activity_restaurant_dashboard);
         EdgeToEdge.enable(this);
 
-        // Initialize views
         Button logout = findViewById(R.id.logout_button);
         TextView restaurantNameTextView = findViewById(R.id.restaurant_name_text_view);
         TextView resCuisine = findViewById(R.id.cuisine);
@@ -52,17 +51,14 @@ public class RestaurantDashboard extends AppCompatActivity {
         Button selectImageButton = findViewById(R.id.uploadDishImageButton);
         Button clear = findViewById(R.id.clear);
 
-        // Set up select image button
         selectImageButton.setOnClickListener(v -> openFileChooser());
 
-        // Retrieve data from Intent
         Intent intent = getIntent();
         String restaurantName = intent.getStringExtra("res_name");
         String cuisine = intent.getStringExtra("cuisine");
         String address = intent.getStringExtra("address");
         String email = intent.getStringExtra("email");
 
-        // Display the retrieved data
         if (restaurantName != null) {
             restaurantNameTextView.setText(capitalizeFirstLetter(restaurantName));
         } else {
@@ -81,7 +77,6 @@ public class RestaurantDashboard extends AppCompatActivity {
             resAddress.setText("-");
         }
 
-        // Set up add dish button
         Button addDishButton = findViewById(R.id.addDishButton);
         EditText dishNameEditText = findViewById(R.id.dishNameEditText);
         EditText dishDescriptionEditText = findViewById(R.id.dishDescriptionEditText);
@@ -134,7 +129,6 @@ public class RestaurantDashboard extends AppCompatActivity {
                                         .add(menuItem)
                                         .addOnSuccessListener(documentReference -> {
                                             Toast.makeText(getApplicationContext(), "Dish Added!", Toast.LENGTH_SHORT).show();
-                                            // Clear inputs and hide image view
                                             dishNameEditText.setText("");
                                             dishDescriptionEditText.setText("");
                                             dishPriceEditText.setText("");
@@ -191,14 +185,12 @@ public class RestaurantDashboard extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        // Sign out the user when the activity is stopped
         FirebaseAuth.getInstance().signOut();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Additional sign out to ensure user is signed out in case onStop is not called
         FirebaseAuth.getInstance().signOut();
     }
 }

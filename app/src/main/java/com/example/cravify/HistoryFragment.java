@@ -34,19 +34,15 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_history_fragment, container, false);
 
-        // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Initialize views
         orderHistoryRecyclerView = view.findViewById(R.id.order_history_recyclerview);
         noOrdersLayout = view.findViewById(R.id.no_orders_layout);
 
-        // Set up RecyclerView
         orderHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         orderHistoryAdapter = new OrderHistoryAdapter(orderHistoryList);
         orderHistoryRecyclerView.setAdapter(orderHistoryAdapter);
 
-        // Load Order History
         loadOrderHistory();
 
         return view;
@@ -70,7 +66,6 @@ public class HistoryFragment extends Fragment {
                         }
                         orderHistoryAdapter.notifyDataSetChanged();
 
-                        // Show/hide the empty state layout
                         if (orderHistoryList.isEmpty()) {
                             noOrdersLayout.setVisibility(View.VISIBLE);
                             orderHistoryRecyclerView.setVisibility(View.GONE);
